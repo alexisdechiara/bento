@@ -4,6 +4,7 @@ export default defineNuxtConfig({
   modules: [
     '@nuxt/content',
     '@nuxt/ui',
+    '@nuxt/image',
     '@nuxtjs/fontaine',
     '@nuxtjs/google-fonts',
     'nuxt-og-image'

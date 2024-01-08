@@ -7,7 +7,7 @@ export default defineAppConfig({
         background: 'var(--color-gray-50)'
       },
       dark: {
-        background: 'var(--color-gray-950)'
+        background: 'var(--color-gray-900)'
       }
     },
     button: {
@@ -16,9 +16,6 @@ export default defineAppConfig({
         size: 'md',
         color: 'black'
       }
-    },
-    input: {
-      rounded: 'rounded-full'
     },
     header: {
       wrapper: 'lg:!border-transparent bg-gray-50 dark:bg-gray-950',

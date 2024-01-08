@@ -1,31 +1,21 @@
 <script setup lang="ts">
 const links = [{
-  label: 'Features',
-  to: '#features',
+  label: 'Homepage',
+  to: '/',
+  icon: 'i-heroicons-home',
+  exactHash: true
+}, {
+  label: 'Playground',
+  to: '/playground',
   icon: 'i-heroicons-cube-transparent',
-  exactHash: true
-}, {
-  label: 'Pricing',
-  to: '#pricing',
-  icon: 'i-heroicons-credit-card',
-  exactHash: true
-}, {
-  label: 'Testimonials',
-  to: '#testimonials',
-  icon: 'i-heroicons-academic-cap',
-  exactHash: true
-}, {
-  label: 'FAQ',
-  to: '#faq',
-  icon: 'i-heroicons-question-mark-circle',
-  exactHash: true
+  exactHash: true,
 }]
 </script>
 
 <template>
   <UHeader :links="links">
     <template #logo>
-      Nuxt UI Pro <UBadge label="Landing" variant="subtle" class="mb-0.5" />
+      Bento UI <UBadge label="Studio" variant="subtle" class="mb-0.5" />
     </template>
 
     <template #right>
