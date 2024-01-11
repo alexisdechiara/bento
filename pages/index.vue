@@ -28,7 +28,7 @@ defineOgImage({
     </ULandingSection>
 
     <ULandingSection id="pricing" :title="page.pricing.title" :description="page.pricing.description" :headline="page.pricing.headline">
-      <UPricingGrid compact>
+      <UPricingGrid>
         <UPricingCard v-for="(plan, index) in page.pricing.plans" :key="index" v-bind="plan" />
       </UPricingGrid>
     </ULandingSection>

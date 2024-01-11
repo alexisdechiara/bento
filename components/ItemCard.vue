@@ -8,7 +8,7 @@ defineProps<{
 </script>
 
 <template>
-  <UCard :ui="{ base: 'h-fit relative cursor-pointer hover:outline outline-primary' }">
+  <UCard :ui="{ base: 'h-full relative cursor-pointer hover:outline outline-primary' }">
     <div v-if="icon || $slots.icon" class="mb-2 flex">
       <slot name="icon">
         <UIcon :name="(icon as string)" dynamic class="w-10 h-10 flex-shrink-0 text-primary" />

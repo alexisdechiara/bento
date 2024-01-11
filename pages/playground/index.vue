@@ -1,22 +1,8 @@
 <script setup lang="ts">
 import ImageItem from '~/components/Item/ImageItem.vue'
 
-const layout = ref(
-  [
-    { x: 0, y: 0, w: 2, h: 2, i: 0 },
-    { x: 2, y: 0, w: 2, h: 4, i: 1 },
-    { x: 4, y: 0, w: 2, h: 5, i: 2 },
-    { x: 6, y: 0, w: 5, h: 3, i: 3 },
-    { x: 8, y: 0, w: 2, h: 3, i: 4 },
-    { x: 8, y: 0, w: 2, h: 3, i: 5 },
-    { x: 0, y: 5, w: 1, h: 6, i: 6 },
-    { x: 2, y: 5, w: 2, h: 5, i: 7 },
-    { x: 4, y: 5, w: 2, h: 5, i: 8 },
-    { x: 6, y: 3, w: 2, h: 4, i: 9 }
-  ]
-)
-
 const isOpen = ref(false)
+const gridStore = useGridStore()
 </script>
 
 <template>
@@ -25,15 +11,15 @@ const isOpen = ref(false)
       <UButton label="Button" @click="isOpen = true" />
     </div>
     <UDivider class="py-4" />
-    <grid-layout v-model:layout="layout" :col-num="12" :row-height="24" :vertical-compact="true" :prevent-collision="false">
+    <grid-layout v-if="Array.isArray(gridStore.items) && gridStore.items.length" v-model:layout="gridStore.items" :col-num="gridStore.settings.colNum" :row-height="gridStore.settings.rowHeight" :vertical-compact="gridStore.settings.verticalCompact" :prevent-collision="gridStore.settings.preventCollision">
       <template #default="{ gridItemProps }">
-        <grid-item v-for="item in layout" :key="item.i" v-bind="gridItemProps" :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="item.i" :is-resizable="true">
-          <image-item />
+        <grid-item v-for="item in gridStore.items" :key="item.layout.i" v-bind="gridItemProps" :x="item.layout.x" :y="item.layout.y" :w="item.layout.w" :h="item.layout.h" :i="item.layout.i" :is-resizable="true">
+          <image-item :value="item.image" />
         </grid-item>
       </template>
     </grid-layout>
-    <UModal v-model="isOpen" fullscreen :ui="{ paddin: 'p-0', fullscreen: 'w-1/2 h-1/2 rounded-lg' }">
-      <Selector />
+    <UModal v-model="isOpen" fullscreen :ui="{ paddin: 'p-0', fullscreen: 'w-2/3 h-1/2 xl:w-1/2 rounded-lg' }">
+      <ItemMenu />
     </UModal>
   </UContainer>
 </template>
