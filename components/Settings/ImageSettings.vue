@@ -85,10 +85,8 @@ const onSubmit = (() => {
   const gridStore = useGridStore()
   const item: Item = {
     label: 'Image',
-    layout: {
-      h: height.value,
-      w: width.value
-    },
+    h: height.value,
+    w: width.value,
     image: {
       values: imageFile.value,
       url: imageURL.value

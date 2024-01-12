@@ -34,7 +34,7 @@ defineOgImage({
     </ULandingSection>
 
     <ULandingSection id="faq" :title="page.faq.title" :description="page.faq.description">
-      <ULandingFAQ
+      <!-- <ULandingFAQ
         multiple
         :items="page.faq.items"
         :ui="{
@@ -46,7 +46,7 @@ defineOgImage({
           }
         }"
         class="max-w-4xl mx-auto"
-      />
+      /> -->
     </ULandingSection>
   </div>
 </template>

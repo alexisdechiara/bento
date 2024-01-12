@@ -13,7 +13,7 @@ hero:
       icon: i-heroicons-beaker
       size: xl
       color: gray
-      to: /playground/templates
+      to: /playground
 features:
   headline: Features
   title: Why choose our service?

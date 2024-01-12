@@ -13,5 +13,9 @@ export default <Partial<Config>>{
       pattern: /object-(cover|fill|contain|scale-down)/,
     },
   ],
-  }
+  },
+  plugins: [
+    require('@tailwindcss/container-queries'),
+    require('@tailwindcss/aspect-ratio'),
+  ],
 }

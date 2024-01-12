@@ -5,56 +5,60 @@ export const useGridStore = defineStore({
   state: () => ({
     settings: {
       colNum: 12,
-      rowHeight: 64,
+      rowHeight: 100,
       verticalCompact: true,
       preventCollision: false,
+      borderRadius: 8
     },
     items: [] as Array<Item>
   }),
   getters: {
-    getAllItems(): Array<Item> {
-      return this.items
+    getRowHeightForSquare() {
+      return 1200 / this.settings.colNum
     }
   },
   actions: {
     addItem(item: Item) {
       if (item) {
 
-        if (!item.layout.x) {
-          item.layout.x = 1
+        if (!item.x) {
+          item.x = (this.items.length) % this.settings.colNum || 4
         }
 
-        if (!item.layout.y) {
-          item.layout.y = 1
+        if (!item.y) {
+          item.y = this.items.length + this.settings.colNum
         }
 
-        if (!item.layout.i) {
-          item.layout.i = Math.random().toString(36).slice(2)
+        if (!item.i) {
+          item.i = Math.random().toString(36).slice(2)
         }
         
         console.log(item)
-        this.items = []
         this.items.push(item)
       } else {
         throw new Error('Item not pushed because it is null or empty')
       }
     },
     removeItem(item: Item) {
-      const index = this.items.map(e => e.layout.i).indexOf(item.layout.i)
+      const index = this.items.map(e => e.i).indexOf(item.i)
       this.items.splice(index,1)
+    },
+    incrementColNum() {
+      if (this.settings.colNum < 24) this.settings.colNum ++
+    },
+    decrementColNum() {
+      if (this.settings.colNum > 1) this.settings.colNum --
     }
   }
 })
 
 export interface Item {
   label: string
-  layout: {
-    x?: number
-    y?: number
-    h?: number
-    w?: number
-    i?: any
-  }
+  x?: number
+  y?: number
+  h?: number
+  w?: number
+  i?: any
   image?: Image
 }
 
