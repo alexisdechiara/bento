@@ -13,7 +13,7 @@ export const useGridStore = defineStore({
     items: [] as Array<Item>
   }),
   getters: {
-    getRowHeightForSquare() {
+    getRowHeightForSquare(): number {
       return 1200 / this.settings.colNum
     }
   },
@@ -51,18 +51,3 @@ export const useGridStore = defineStore({
     }
   }
 })
-
-export interface Item {
-  label: string
-  x?: number
-  y?: number
-  h?: number
-  w?: number
-  i?: any
-  image?: Image
-}
-
-export interface Image {
-  values: object
-  url: string
-}

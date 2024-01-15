@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import ImageItem from '~/components/Item/ImageItem.vue'
+import RadialChartItem from '~/components/Item/RadialChartItem.vue'
 import { GridItem, GridLayout } from 'vue-ts-responsive-grid-layout'
 const isOpen = ref(false)
 const showGrid = ref(false)
@@ -11,7 +12,7 @@ const { settings, items } = storeToRefs(gridStore)
 </script>
 
 <template>
-  <UContainer class="bg-white dark:bg-gray-950 rounded-lg" :ui="{base:'flex flex-col items-center', padding: 'py-4 sm:py-6 lg:py-8' }">
+  <UContainer class="bg-white dark:bg-gray-950 rounded-lg my-8" :ui="{base:'flex flex-col items-center', padding: 'py-4 sm:py-6 lg:py-8' }">
     <div class="flex w-full justify-between">
       <UButton label="Button" @click="isOpen = true" />
       <UPopover :popper="{ placement: 'bottom-end', offsetDistance: 12 }">
@@ -97,13 +98,17 @@ const { settings, items } = storeToRefs(gridStore)
     </div>
     <UDivider class="py-4" />
     <ClientOnly>
-      <GridLayout v-model:layout="items" class="lg:w-[960px] xl:w-[1200px]" :prevent-collision="preventCollision" :row-height="gridStore.getRowHeightForSquare" :col-num="settings.colNum" :is-resizable="true" :is-draggable="true" :border-radius-px="settings.borderRadius" :auto-size="true" :show-grid-lines="showGrid" :vertical-compact="!freeGrid">
-        <GridItem v-for="item in items" :key="item.i" :show-close-button="false" :is-resizable="true" :enable-edit-mode="true" :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="item.i" :use-border-radius="roundedItems">
-          <image-item :value="item.image" />
-        </GridItem>
-      </GridLayout>
+      <div :class="{'h-screen' : !(Array.isArray(items) && items.length)}">
+        <GridLayout v-if="Array.isArray(items) && items.length" v-model:layout="items" class="lg:w-[960px] xl:w-[1200px]" :prevent-collision="preventCollision" :row-height="gridStore.getRowHeightForSquare" :col-num="settings.colNum" :is-resizable="true" :is-draggable="true" :border-radius-px="settings.borderRadius" :auto-size="true" :show-grid-lines="showGrid" :vertical-compact="!freeGrid">
+          <GridItem v-for="item in items" :key="item.i" :show-close-button="false" :is-resizable="true" :enable-edit-mode="true" :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="item.i" :use-border-radius="roundedItems" class="relative border border-solid">
+            <image-item v-if="item.componentId === 1" :value="item.image" @remove="gridStore.removeItem(item)" />
+            <!-- Fix it -->
+            <RadialChartItem v-else-if="item.componentId === 2" :value="item.chart" @remove="gridStore.removeItem(item)" />
+          </GridItem>
+        </GridLayout>
+      </div>
     </ClientOnly>
-    <UModal v-model="isOpen" fullscreen :ui="{ paddin: 'p-0', fullscreen: 'w-2/3 h-1/2 xl:w-1/2 rounded-lg' }">
+    <UModal v-model="isOpen" fullscreen :ui="{ paddin: 'p-0', fullscreen: 'w-2/3 h-1/2 rounded-lg' }">
       <ItemMenu />
     </UModal>
   </UContainer>
@@ -126,11 +131,13 @@ const { settings, items } = storeToRefs(gridStore)
   }
 
   &.vue-use-radius {
-    border-radius: v-bind('settings.borderRadius + "px"');
+    border-radius: 8px;
+    // border-radius: v-bind('settings.borderRadius + "px"') !important;
     overflow: hidden;
 
     & ~.vue-grid-placeholder {
-      border-radius: v-bind('settings.borderRadius + "px"');
+      border-radius: 8px;
+      // border-radius: v-bind('settings.borderRadius + "px"') !important;
     }
   }
 
