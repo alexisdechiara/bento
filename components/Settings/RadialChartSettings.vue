@@ -43,30 +43,28 @@
         <UFormGroup label="Type">
           <USelectMenu ref="chart" v-model="chartAngles" :options="chartType" option-attribute="name" value-attribute="values" @change="updateChartOptions" />
         </UFormGroup>
-        <UFormGroup>
-          <div class="flex w-full justify-between">
-            Show title
-            <UToggle v-model="showTitle" @update:model-value="updateChartOptions" />
-          </div>
-          <UInput v-model="chartTitle" :disabled="!showTitle" @change="updateChartOptions" />
-        </UFormGroup>
-        <UFormGroup label="Show total value" class="col-span-4">
+        <div class="flex w-full items-center gap-x-4">
+          <UInput v-model="chartTitle" placeholder="Chart title" class="w-full" :disabled="!showTitle" @change="updateChartOptions" />
+          <UToggle v-model="showTitle" @update:model-value="updateChartOptions" />
+        </div>
+        <div class="flex w-full items-center gap-x-4">
+          <label class="w-full grow">Show total value</label>
           <UToggle v-model="showTotalValue" @update:model-value="updateChartOptions" />
-        </UFormGroup>
+        </div>
         <UTable :empty-state="{ icon: 'i-heroicons-circle-stack-20-solid', label: 'No data' }" :rows="stats" :columns="colums" :ui="{td: { padding: 'p-0'}}">
           <template #label-data="{ row }">
-            <input v-model.lazy="row.label" type="text" class="px-3 py-4 w-20" @change="updateChartOptions"> 
+            <input v-model.lazy="row.label" type="text" class="px-3 py-4 w-max" @change="updateChartOptions"> 
           </template>
           <template #value-data="{ row }">
-            <input v-model.lazy="row.value" type="number" class="px-3 py-4 w-16" @change="updateChartOptions">
+            <input v-model.lazy="row.value" type="number" class="px-3 py-4 w-max" @change="updateChartOptions">
           </template>
           <template #color-data="{ row }">
-            <div class="flex justify-center items-center px-3 py-4 w-full">
+            <div class="flex justify-center items-center px-3 py-4 w-max">
               <ColorPicker v-model:pureColor="row.color" format="hex6" shape="circle" round-history lang="En" @update:pure-color="updateChartOptions" />
             </div>
           </template>
           <template #actions-data="{ row, index }">
-            <UDropdown :items="tableActions(row, index)">
+            <UDropdown :items="tableActions(row, index)" class="w-max">
               <UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />
             </UDropdown>
           </template>

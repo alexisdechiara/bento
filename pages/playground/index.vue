@@ -18,80 +18,60 @@ const { settings, items } = storeToRefs(gridStore)
       <UPopover :popper="{ placement: 'bottom-end', offsetDistance: 12 }">
         <UButton icon="i-heroicons-adjustments-horizontal" color="primary" variant="soft" :ui="{ rounded:'rounded-md'}" />
         <template #panel>
-          <div class="flex flex-col p-4 min-w-48 gap-y-2">
-            <div class="flex w-full gap-x-4 justify-center items-center">
-              <label class="whitespace-nowrap leading-8 flex items-center gap-x-1"> 
-                <UTooltip text="The number of columns in the grid" :popper="{ placement: 'left' }">
-                  <UIcon name="i-heroicons-information-circle-solid" class="text-sm" />
-                </UTooltip>
-                Column number
-              </label>
-              <div class="flex w-full justify-between items-center">
-                <UButton icon="i-heroicons-minus" :padded="false" color="primary" square variant="ghost" @click="gridStore.decrementColNum" />
-                <span class="whitespace-nowrap px-2">{{ settings.colNum }}</span>
-                <UButton icon="i-heroicons-plus" :padded="false" color="primary" square variant="ghost" @click="gridStore.incrementColNum" />
-              </div>
-            </div>
-            <div class="rounded-lg border-solid" :class="{ 'border': roundedItems }">
-              <div class="flex w-full" :class="{ 'border-b border-solid py-3 px-2': roundedItems }">
-                <label class="whitespace-nowrap leading-none flex items-center gap-x-1 w-full"> 
-                  <UTooltip text="Make border of items in the grid rounded" :popper="{ placement: 'left' }">
-                    <UIcon name="i-heroicons-information-circle-solid" class="text-sm" />
-                  </UTooltip>
-                  Rounded items
-                </label>
+          <div class="flex flex-col p-4 w-80 gap-y-2">
+            <SettingAccordion label="Column number" description="The number of columns in the grid">
+              <template #action>
+                <div class="flex w-1/3 justify-between items-center">
+                  <UButton icon="i-heroicons-minus" color="primary" class="p-1" square variant="ghost" @click.prevent="gridStore.decrementColNum" />
+                  <span class="whitespace-nowrap px-2">{{ settings.colNum }}</span>
+                  <UButton icon="i-heroicons-plus" color="primary" class="p-1" square variant="ghost" @click.prevent="gridStore.incrementColNum" />
+                </div>
+              </template>
+            </SettingAccordion>
+            <SettingAccordion label="Rounded items" description="Make border of items in the grid rounded">
+              <template #action>
                 <UToggle v-model="roundedItems" />
-              </div>
-              <ul class="flex w-full gap-x-2 rounded-b-lg p-2" :class="{'hidden' : !roundedItems }">
-                <li class="w-full">
-                  <input id="rounded-extra-small" v-model="settings.borderRadius" type="radio" name="roundedRadius" :value="2" class="hidden peer">
-                  <label for="rounded-extra-small" class="aspect-w-1 aspect-h-1	flex items-center justify-center cursor-pointer peer-checked bg-gray-100 hover:bg-black hover:text-gray-50 peer-checked:bg-black peer-checked:text-gray-50 w-10 p-2 rounded-md">XS</label>
-                </li>
-                <li class="w-full">
-                  <input id="rounded-small" v-model="settings.borderRadius" type="radio" name="borderRadius" :value="4" class="hidden peer">
-                  <label for="rounded-small" class="aspect-w-1 aspect-h-1 flex items-center justify-center cursor-pointer peer-checked bg-gray-100 hover:bg-black hover:text-gray-50 peer-checked:bg-black peer-checked:text-gray-50 w-10 p-2 rounded-md">S</label>
-                </li>
-                <li class="w-full">
-                  <input id="rounded-medium" v-model="settings.borderRadius" type="radio" name="borderRadius" :value="8" class="hidden peer">
-                  <label for="rounded-medium" class="aspect-w-1 aspect-h-1 flex items-center justify-center cursor-pointer peer-checked bg-gray-100 hover:bg-black hover:text-gray-50 peer-checked:bg-black peer-checked:text-gray-50 w-10 p-2 rounded-md">M</label>
-                </li>
-                <li class="w-full">
-                  <input id="rounded-large" v-model="settings.borderRadius" type="radio" name="borderRadius" :value="12" class="hidden peer">
-                  <label for="rounded-large" class="aspect-w-1 aspect-h-1 flex items-center justify-center cursor-pointer peer-checked bg-gray-100 hover:bg-black hover:text-gray-50 peer-checked:bg-black peer-checked:text-gray-50 w-10 p-2 rounded-md">L</label>
-                </li>
-                <li class="w-full">
-                  <input id="rounded-extra-large" v-model="settings.borderRadius" type="radio" name="borderRadius" :value="16" class="hidden peer">
-                  <label for="rounded-extra-large" class="aspect-w-1 aspect-h-1 flex items-center justify-center cursor-pointer peer-checked bg-gray-100 hover:bg-black hover:text-gray-50 peer-checked:bg-black peer-checked:text-gray-50 w-10 p-2 rounded-md">XL</label>
-                </li>
-              </ul>
-            </div>
-            <div class="flex w-full">
-              <label class="whitespace-nowrap leading-none flex items-center gap-x-1 w-full"> 
-                <UTooltip text="Allow items to be moved freely without vertical shrink" :popper="{ placement: 'left' }">
-                  <UIcon name="i-heroicons-information-circle-solid" class="text-sm" />
-                </UTooltip>
-                Free grid
-              </label>
-              <UToggle v-model="freeGrid" />
-            </div>
-            <div class="flex w-full">
-              <label class="whitespace-nowrap leading-none flex items-center gap-x-1 w-full"> 
-                <UTooltip text="Allow items to move other items when dragging them" :popper="{ placement: 'left' }">
-                  <UIcon name="i-heroicons-information-circle-solid" class="text-sm" />
-                </UTooltip>
-                Prevent collision
-              </label>
-              <UToggle v-model="preventCollision" />
-            </div>
-            <div class="flex w-full">
-              <label class="whitespace-nowrap leading-none flex items-center gap-x-1 w-full"> 
-                <UTooltip text="Show grid for better visualisation of the layout" :popper="{ placement: 'left' }">
-                  <UIcon name="i-heroicons-information-circle-solid" class="text-sm" />
-                </UTooltip>
-                Show grid
-              </label>
-              <UToggle v-model="showGrid" />
-            </div>
+              </template>
+              <template #content>
+                <ul class="flex w-full gap-x-2 rounded-b-lg p-1 pt-0">
+                  <li class="w-full flex justify-center">
+                    <input id="rounded-extra-small" v-model="settings.borderRadius" type="radio" name="roundedRadius" :value="2" class="hidden peer">
+                    <label for="rounded-extra-small" class="aspect-w-1 aspect-h-1	flex items-center justify-center cursor-pointer peer-checked bg-gray-100 hover:bg-black hover:text-gray-50 peer-checked:bg-black peer-checked:text-gray-50 w-10 p-2 rounded-md">XS</label>
+                  </li>
+                  <li class="w-full flex justify-center">
+                    <input id="rounded-small" v-model="settings.borderRadius" type="radio" name="borderRadius" :value="4" class="hidden peer">
+                    <label for="rounded-small" class="aspect-w-1 aspect-h-1 flex items-center justify-center cursor-pointer peer-checked bg-gray-100 hover:bg-black hover:text-gray-50 peer-checked:bg-black peer-checked:text-gray-50 w-10 p-2 rounded-md">S</label>
+                  </li>
+                  <li class="w-full flex justify-center">
+                    <input id="rounded-medium" v-model="settings.borderRadius" type="radio" name="borderRadius" :value="8" class="hidden peer">
+                    <label for="rounded-medium" class="aspect-w-1 aspect-h-1 flex items-center justify-center cursor-pointer peer-checked bg-gray-100 hover:bg-black hover:text-gray-50 peer-checked:bg-black peer-checked:text-gray-50 w-10 p-2 rounded-md">M</label>
+                  </li>
+                  <li class="w-full flex justify-center">
+                    <input id="rounded-large" v-model="settings.borderRadius" type="radio" name="borderRadius" :value="12" class="hidden peer">
+                    <label for="rounded-large" class="aspect-w-1 aspect-h-1 flex items-center justify-center cursor-pointer peer-checked bg-gray-100 hover:bg-black hover:text-gray-50 peer-checked:bg-black peer-checked:text-gray-50 w-10 p-2 rounded-md">L</label>
+                  </li>
+                  <li class="w-full flex justify-center">
+                    <input id="rounded-extra-large" v-model="settings.borderRadius" type="radio" name="borderRadius" :value="16" class="hidden peer">
+                    <label for="rounded-extra-large" class="aspect-w-1 aspect-h-1 flex items-center justify-center cursor-pointer peer-checked bg-gray-100 hover:bg-black hover:text-gray-50 peer-checked:bg-black peer-checked:text-gray-50 w-10 p-2 rounded-md">XL</label>
+                  </li>
+                </ul>
+              </template>
+            </SettingAccordion>
+            <SettingAccordion label="Free grid" description="Allow items to be moved freely without vertical shrink">
+              <template #action>
+                <UToggle v-model="freeGrid" />
+              </template>
+            </SettingAccordion>
+            <SettingAccordion label="Prevent collision" description="Allow items to move other items when dragging them">
+              <template #action>
+                <UToggle v-model="preventCollision" />
+              </template>
+            </SettingAccordion>
+            <SettingAccordion label="Show grid" description="Show grid for better visualisation of the layout">
+              <template #action>
+                <UToggle v-model="showGrid" />
+              </template>
+            </SettingAccordion>
           </div>
         </template>
       </UPopover>
