@@ -4,11 +4,11 @@ export const useGridStore = defineStore({
   id: 'GridStore',
   state: () => ({
     settings: {
-      colNum: 12,
-      rowHeight: 100,
-      verticalCompact: true,
-      preventCollision: false,
-      borderRadius: 8
+      colNum: 12 as number,
+      rowHeight: 100 as number,
+      verticalCompact: true as boolean,
+      preventCollision: false as boolean,
+      borderRadius: '16px' as string
     },
     items: [] as Array<Item>
   }),

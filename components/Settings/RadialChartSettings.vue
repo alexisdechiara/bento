@@ -1,80 +1,51 @@
 <template>
-  <div class="pb-5 flex justify-between w-full h-fit">
-    <UButton :padded="false" color="gray" variant="link" icon="i-heroicons-arrow-left" @click="$emit('return')" />
-    <UTabs :items="items" @change="onChangeTab" />
-    <span />
-  </div>
-
-  <div v-if="currentTab === 0" class="grid grid-cols-2 gap-x-6">
-    <div class="flex flex-col gap-y-2">
-      <div class="flex justify-between gap-x-4">
-        <UFormGroup label="Width">
-          <UInput v-model="width" min="1" type="number" required>
-            <template #leading>
-              <UIcon name="i-radix-icons-width" dynamic />
-            </template>
-            <template #trailing>
-              <span class="text-gray-500 dark:text-gray-400 text-xs">col</span>
-            </template>
-          </UInput>
-        </UFormGroup>
-        <UFormGroup label="Height">
-          <UInput v-model="height" min="1" type="number" required>
-            <template #leading>
-              <UIcon name="i-radix-icons-height" dynamic />
-            </template>
-            <template #trailing>
-              <span class="text-gray-500 dark:text-gray-400 text-xs">row</span>
-            </template>
-          </UInput>
-        </UFormGroup>
+  <SettingsItem v-model:width="width" v-model:height="height" @return="$emit('return')">
+    <template #content>
+      <div class="grid grid-cols-2">
+        <ClientOnly>
+          <div class="chart flex justify-center items-center w-full">
+            <apexchart type="radialBar" height="66%" :options="chartOptions" :series="series" />
+          </div>
+        </ClientOnly>
+        <div class="flex flex-col h-full gap-y-4">
+          <UFormGroup label="Type">
+            <USelectMenu ref="chart" v-model="selectedChartType" :options="chartType" option-attribute="label" @change="updateChartOptions" />
+          </UFormGroup>
+          <div class="flex w-full items-center gap-x-4">
+            <UInput v-model="chartTitle" placeholder="Chart title" class="w-full" :disabled="!showTitle" @change="updateChartOptions" />
+            <UToggle v-model="showTitle" @update:model-value="updateChartOptions" />
+          </div>
+          <div class="flex w-full items-center gap-x-4">
+            <label class="w-full grow">Show total value</label>
+            <UToggle v-model="showTotalValue" @update:model-value="updateChartOptions" />
+          </div>
+          <div class="max-h-72 overflow-auto">
+            <UTable :empty-state="{ icon: 'i-heroicons-circle-stack-20-solid', label: 'No data' }" :rows="stats" :columns="colums" :ui="{ td: { base: 'w-min', padding: 'p-0' } }">
+              <template #label-data="{ row }">
+                <input v-model.lazy="row.label" type="text" class="px-3 py-4 w-full" @change="updateChartOptions"> 
+              </template>
+              <template #value-data="{ row }">
+                <input v-model.lazy="row.value" type="number" min="0" class="px-3 py-4 w-full" @change="updateChartOptions">
+              </template>
+              <template #color-data="{ row }">
+                <div class="flex justify-center items-center px-3 py-4 w-20">
+                  <ColorPicker v-model:pureColor="row.color" format="hex6" shape="circle" round-history lang="En" @update:pure-color="updateChartOptions" />
+                </div>
+              </template>
+              <template #actions-data="{ row, index }">
+                <UDropdown :items="tableActions(row, index)" class="w-max">
+                  <UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />
+                </UDropdown>
+              </template>
+            </UTable>
+          </div>
+        </div>
+        <UButton block class="mt-4 col-span-2" @click="onSubmit()">
+          Submit
+        </UButton>
       </div>
-    </div>
-  </div>
-
-  <div v-else-if="currentTab === 1">
-    <div class="grid grid-cols-2">
-      <ClientOnly>
-        <div class="chart flex justify-center items-center w-full">
-          <apexchart type="radialBar" height="66%" :options="chartOptions" :series="series" />
-        </div>
-      </ClientOnly>
-      <div class="flex flex-col h-full gap-y-4">
-        <UFormGroup label="Type">
-          <USelectMenu ref="chart" v-model="chartAngles" :options="chartType" option-attribute="name" value-attribute="values" @change="updateChartOptions" />
-        </UFormGroup>
-        <div class="flex w-full items-center gap-x-4">
-          <UInput v-model="chartTitle" placeholder="Chart title" class="w-full" :disabled="!showTitle" @change="updateChartOptions" />
-          <UToggle v-model="showTitle" @update:model-value="updateChartOptions" />
-        </div>
-        <div class="flex w-full items-center gap-x-4">
-          <label class="w-full grow">Show total value</label>
-          <UToggle v-model="showTotalValue" @update:model-value="updateChartOptions" />
-        </div>
-        <UTable :empty-state="{ icon: 'i-heroicons-circle-stack-20-solid', label: 'No data' }" :rows="stats" :columns="colums" :ui="{td: { padding: 'p-0'}}">
-          <template #label-data="{ row }">
-            <input v-model.lazy="row.label" type="text" class="px-3 py-4 w-max" @change="updateChartOptions"> 
-          </template>
-          <template #value-data="{ row }">
-            <input v-model.lazy="row.value" type="number" class="px-3 py-4 w-max" @change="updateChartOptions">
-          </template>
-          <template #color-data="{ row }">
-            <div class="flex justify-center items-center px-3 py-4 w-max">
-              <ColorPicker v-model:pureColor="row.color" format="hex6" shape="circle" round-history lang="En" @update:pure-color="updateChartOptions" />
-            </div>
-          </template>
-          <template #actions-data="{ row, index }">
-            <UDropdown :items="tableActions(row, index)" class="w-max">
-              <UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />
-            </UDropdown>
-          </template>
-        </UTable>
-      </div>
-      <UButton block class="mt-4 col-span-2" @click="onSubmit()">
-        Submit
-      </UButton>
-    </div>
-  </div>
+    </template>
+  </SettingsItem>
 </template>
 
 <script lang="ts" setup>
@@ -85,7 +56,7 @@ const colums = [{
   },
   {
   key: 'value',
-  label: 'Value'
+  label: 'Value (%)'
   },
   {
   key: 'color',
@@ -167,24 +138,23 @@ const tableActions = (row, index) => [
 ]
 
 const chartType = [{
-    name: 'Basic',
-    values: [0, 360]
+    label: 'Basic',
+    angles: [0, 360]
   }, {
-    name: 'Circular gauge',
-    values: [-135,135]
+    label: 'Circular gauge',
+    angles: [-135,135]
   }, {
-    name: 'Semi circular gauge',
-    values: [-90,90]
+    label: 'Semi circular gauge',
+    angles: [-90,90]
   }
 ]
 
 const chartTitle = ref('Title')
 const showTitle = ref(true)
 const showTotalValue = ref(false)
-const chartAngles = ref(chartType[0].values)
+const selectedChartType = ref(chartType[0])
 const width = ref(1)
 const height = ref(1)
-const currentTab = ref(0)
 const series = computed(() => stats.map(item => item.value))
 const colors = computed(() => stats.map(item => item.color))
 const labels = computed(() => stats.map(item => item.label))
@@ -195,11 +165,11 @@ const chartOptions = ref({
   },
   plotOptions: {
     radialBar: {
-      startAngle: chartAngles.value[0],
-      endAngle: chartAngles.value[1],
+      startAngle: selectedChartType.value.angles[0],
+      endAngle: selectedChartType.value.angles[1],
       track: {
-        startAngle: chartAngles.value[0],
-        endAngle: chartAngles.value[1],
+        startAngle: selectedChartType.value.angles[0],
+        endAngle: selectedChartType.value.angles[1],
       },
       hollow: {
         size: '50%'
@@ -232,26 +202,16 @@ const chartOptions = ref({
 
 defineEmits(['return'])
 
-const items = [{
-  label: 'Item settings',
-}, {
-  label: 'Edit content',
-}]
-
-const onChangeTab = ((index) => {
-  currentTab.value = index
-})
-
 const updateChartOptions = (() => {
   chartOptions.value = {
     ...chartOptions.value, ...{
       plotOptions: {
         radialBar: {
-          startAngle: chartAngles.value[0],
-          endAngle: chartAngles.value[1],
+          startAngle: selectedChartType.value.angles[0],
+          endAngle: selectedChartType.value.angles[1],
           track: {
-            startAngle: chartAngles.value[0],
-            endAngle: chartAngles.value[1],
+            startAngle: selectedChartType.value.angles[0],
+            endAngle: selectedChartType.value.angles[1],
           },
           hollow: {
             

@@ -9,9 +9,8 @@ export default <Partial<Config>>{
       }
     },
     safelist: [
-    {
-      pattern: /object-(cover|fill|contain|scale-down)/,
-    },
+      { pattern: /object-(cover|fill|contain|scale-down)/ },
+      { pattern: /^(col|row)-span-(1[0-2]|[1-9])$/ },
   ],
   },
   plugins: [

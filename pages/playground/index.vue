@@ -35,23 +35,23 @@ const { settings, items } = storeToRefs(gridStore)
               <template #content>
                 <ul class="flex w-full gap-x-2 rounded-b-lg p-1 pt-0">
                   <li class="w-full flex justify-center">
-                    <input id="rounded-extra-small" v-model="settings.borderRadius" type="radio" name="roundedRadius" :value="2" class="hidden peer">
+                    <input id="rounded-extra-small" v-model="settings.borderRadius" type="radio" name="roundedRadius" value="4px" class="hidden peer">
                     <label for="rounded-extra-small" class="aspect-w-1 aspect-h-1	flex items-center justify-center cursor-pointer peer-checked bg-gray-100 hover:bg-black hover:text-gray-50 peer-checked:bg-black peer-checked:text-gray-50 w-10 p-2 rounded-md">XS</label>
                   </li>
                   <li class="w-full flex justify-center">
-                    <input id="rounded-small" v-model="settings.borderRadius" type="radio" name="borderRadius" :value="4" class="hidden peer">
+                    <input id="rounded-small" v-model="settings.borderRadius" type="radio" name="borderRadius" value="8px" class="hidden peer">
                     <label for="rounded-small" class="aspect-w-1 aspect-h-1 flex items-center justify-center cursor-pointer peer-checked bg-gray-100 hover:bg-black hover:text-gray-50 peer-checked:bg-black peer-checked:text-gray-50 w-10 p-2 rounded-md">S</label>
                   </li>
                   <li class="w-full flex justify-center">
-                    <input id="rounded-medium" v-model="settings.borderRadius" type="radio" name="borderRadius" :value="8" class="hidden peer">
+                    <input id="rounded-medium" v-model="settings.borderRadius" type="radio" name="borderRadius" value="16px" class="hidden peer">
                     <label for="rounded-medium" class="aspect-w-1 aspect-h-1 flex items-center justify-center cursor-pointer peer-checked bg-gray-100 hover:bg-black hover:text-gray-50 peer-checked:bg-black peer-checked:text-gray-50 w-10 p-2 rounded-md">M</label>
                   </li>
                   <li class="w-full flex justify-center">
-                    <input id="rounded-large" v-model="settings.borderRadius" type="radio" name="borderRadius" :value="12" class="hidden peer">
+                    <input id="rounded-large" v-model="settings.borderRadius" type="radio" name="borderRadius" value="24px" class="hidden peer">
                     <label for="rounded-large" class="aspect-w-1 aspect-h-1 flex items-center justify-center cursor-pointer peer-checked bg-gray-100 hover:bg-black hover:text-gray-50 peer-checked:bg-black peer-checked:text-gray-50 w-10 p-2 rounded-md">L</label>
                   </li>
                   <li class="w-full flex justify-center">
-                    <input id="rounded-extra-large" v-model="settings.borderRadius" type="radio" name="borderRadius" :value="16" class="hidden peer">
+                    <input id="rounded-extra-large" v-model="settings.borderRadius" type="radio" name="borderRadius" value="32px" class="hidden peer">
                     <label for="rounded-extra-large" class="aspect-w-1 aspect-h-1 flex items-center justify-center cursor-pointer peer-checked bg-gray-100 hover:bg-black hover:text-gray-50 peer-checked:bg-black peer-checked:text-gray-50 w-10 p-2 rounded-md">XL</label>
                   </li>
                 </ul>
@@ -79,8 +79,8 @@ const { settings, items } = storeToRefs(gridStore)
     <UDivider class="py-4" />
     <ClientOnly>
       <div :class="{'h-screen' : !(Array.isArray(items) && items.length)}">
-        <GridLayout v-if="Array.isArray(items) && items.length" v-model:layout="items" class="lg:w-[960px] xl:w-[1200px]" :prevent-collision="preventCollision" :row-height="gridStore.getRowHeightForSquare" :col-num="settings.colNum" :is-resizable="true" :is-draggable="true" :border-radius-px="settings.borderRadius" :auto-size="true" :show-grid-lines="showGrid" :vertical-compact="!freeGrid">
-          <GridItem v-for="item in items" :key="item.i" :show-close-button="false" :is-resizable="true" :enable-edit-mode="true" :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="item.i" :use-border-radius="roundedItems" class="relative border border-solid">
+        <GridLayout v-if="Array.isArray(items) && items.length" v-model:layout="items" class="lg:w-[960px] xl:w-[1200px]" :prevent-collision="preventCollision" :row-height="gridStore.getRowHeightForSquare" :col-num="settings.colNum" :is-resizable="true" :is-draggable="true" :auto-size="true" :show-grid-lines="showGrid" :vertical-compact="!freeGrid">
+          <GridItem v-for="item in items" :key="item.i" :show-close-button="false" :is-resizable="true" :enable-edit-mode="true" :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="item.i" :use-border-radius="roundedItems" :border-radius="Number(settings.borderRadius.replace(/\D/g, ''))" class="relative border border-solid">
             <image-item v-if="item.componentId === 1" :value="item.image" @remove="gridStore.removeItem(item)" />
             <!-- Fix it -->
             <RadialChartItem v-else-if="item.componentId === 2" :value="item.chart" @remove="gridStore.removeItem(item)" />
@@ -88,7 +88,7 @@ const { settings, items } = storeToRefs(gridStore)
         </GridLayout>
       </div>
     </ClientOnly>
-    <UModal v-model="isOpen" fullscreen :ui="{ paddin: 'p-0', fullscreen: 'w-2/3 h-1/2 rounded-lg' }">
+    <UModal v-model="isOpen" fullscreen :ui="{ paddin: 'p-0', fullscreen: 'w-3/5 h-1/2 rounded-lg' }">
       <ItemMenu />
     </UModal>
   </UContainer>
@@ -111,13 +111,11 @@ const { settings, items } = storeToRefs(gridStore)
   }
 
   &.vue-use-radius {
-    border-radius: 8px;
-    // border-radius: v-bind('settings.borderRadius + "px"') !important;
+    border-radius: v-bind('settings.borderRadius') !important;
     overflow: hidden;
 
     & ~.vue-grid-placeholder {
-      border-radius: 8px;
-      // border-radius: v-bind('settings.borderRadius + "px"') !important;
+      border-radius: v-bind('settings.borderRadius') !important;
     }
   }
 
