@@ -9,12 +9,11 @@ declare global {
     h?: number
     w?: number
     i?: any
-    image?: ImageItem
-    chart?: ChartItem
+    values: any
   }
 
   interface ImageItem {
-    values: object
+    image: object
     url: string
   }
 

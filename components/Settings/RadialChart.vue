@@ -1,5 +1,5 @@
 <template>
-  <SettingsItem v-model:width="width" v-model:height="height" @return="$emit('return')">
+  <SettingsItem v-model="values" label="Radial Chart" :component-id="2" @return="$emit('return')">
     <template #content>
       <div class="grid grid-cols-2">
         <ClientOnly>
@@ -40,9 +40,6 @@
             </UTable>
           </div>
         </div>
-        <UButton block class="mt-4 col-span-2" @click="onSubmit()">
-          Submit
-        </UButton>
       </div>
     </template>
   </SettingsItem>
@@ -153,8 +150,6 @@ const chartTitle = ref('Title')
 const showTitle = ref(true)
 const showTotalValue = ref(false)
 const selectedChartType = ref(chartType[0])
-const width = ref(1)
-const height = ref(1)
 const series = computed(() => stats.map(item => item.value))
 const colors = computed(() => stats.map(item => item.color))
 const labels = computed(() => stats.map(item => item.label))
@@ -230,20 +225,10 @@ const updateChartOptions = (() => {
   }
 })
 
-const onSubmit = (() => {
-  const gridStore = useGridStore()
-  const item: Item = {
-    label: 'Radial Chart',
-    componentId: 2,
-    h: height.value,
-    w: width.value,
-    chart: {
-      chartOptions: chartOptions.value,
-      series: series.value,
-    }
-  }
-  gridStore.addItem(item)
-})
+const values = computed(() => ({
+  chartOptions: chartOptions.value,
+  series: series.value
+}))
 </script>
 
 <style lang="scss">
