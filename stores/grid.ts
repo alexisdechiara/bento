@@ -7,7 +7,10 @@ export const useGridStore = defineStore({
       colNum: 12 as number,
       rowHeight: 100 as number,
       verticalCompact: true as boolean,
+      freeGrid: true as boolean,
       preventCollision: false as boolean,
+      showGrid: false as boolean,
+      roundedItems: true as boolean,
       borderRadius: '16px' as string,
       currentTheme: 'Classic' as string,
       themes: {

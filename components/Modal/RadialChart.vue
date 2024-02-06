@@ -1,5 +1,5 @@
 <template>
-  <SettingsItem v-model="values" label="Radial Chart" :component-id="2" :preserve-aspect-ratio="true" :is-submitable="stats.length > 0" @return="$emit('return')">
+  <ModalItem v-model="values" label="Radial Chart" :component-id="2" :preserve-aspect-ratio="true" :is-submitable="stats.length > 0" @return="$emit('return')" @close="$emit('close')">
     <template #preview>
       <ItemRadialChart :values="values" />
     </template>
@@ -45,7 +45,7 @@
         </div>
       </div>
     </template>
-  </SettingsItem>
+  </ModalItem>
 </template>
 
 <script lang="ts" setup>
@@ -194,7 +194,7 @@ const chartOptions = ref({
   colors: colors,
 })
 
-defineEmits(['return'])
+defineEmits(['return', 'close'])
 
 const updateChartOptions = (() => {
   chartOptions.value = {

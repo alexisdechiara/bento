@@ -48,7 +48,7 @@
           </UFormGroup>
         </div>
         <div class="flex flex-col w-full gap-y-4">
-          <UiExpandingRadio id="defaultRadio" v-model="customTheme" label="Default" name="customTheme" value="default" :src="'/image/landscape.png'">
+          <UIExpandingRadio id="defaultRadio" v-model="customTheme" label="Default" name="customTheme" value="default" :src="'/image/landscape.png'">
             <template #content="{ open }">
               <div class="flex size-full justify-center items-center transition-opacity duration-500" :class="open ? 'opacity-100' : 'opacity-0'">
                 <div class="h-7 w-7 overflow-hidden scale-[4]">
@@ -56,8 +56,8 @@
                 </div>
               </div>
             </template>
-          </UiExpandingRadio>
-          <UiExpandingRadio v-for="(theme, index) in themes" :id="theme + 'Radio'" :key="index" v-model="customTheme" :label="theme" name="customTheme" :value="theme" :src="'/image/landscape.png'">
+          </UIExpandingRadio>
+          <UIExpandingRadio v-for="(theme, index) in themes" :id="theme + 'Radio'" :key="index" v-model="customTheme" :label="theme" name="customTheme" :value="theme" :src="'/image/landscape.png'">
             <template #content="{ open }">
               <div class="flex size-full justify-center items-center transition-opacity duration-500" :class="open ? 'opacity-100' : 'opacity-0'">
                 <div class="h-7 w-7 overflow-hidden scale-[4]">
@@ -65,7 +65,7 @@
                 </div>
               </div>
             </template>
-          </UiExpandingRadio>
+          </UIExpandingRadio>
         </div>
       </div>
     </div>
@@ -79,7 +79,7 @@
 const gridStore = useGridStore()
 const { settings } = storeToRefs(gridStore)
 
-defineEmits(['return'])
+const emit = defineEmits(['return', 'close'])
 
 const currentTab = ref(0)
 const customTheme = ref('default')
@@ -148,6 +148,7 @@ const onSubmit = (() => {
   }
   if (props.isSubmitable) {
     gridStore.addItem(item)
+    emit('close')
   }
 })
 </script>

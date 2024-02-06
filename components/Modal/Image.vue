@@ -1,5 +1,5 @@
 <template>
-  <SettingsItem v-model="values" label="Image" :component-id="1" :is-submitable="imageFile != null && imageURL != ''" @return="$emit('return')">
+  <ModalItem v-model="values" label="Image" :component-id="1" :is-submitable="imageFile != null && imageURL != ''" @return="$emit('return')" @close="$emit('close')">
     <template #preview>
       <ItemImage :values="values" />
     </template>
@@ -22,7 +22,7 @@
         </label>
       </div>
     </template>
-  </SettingsItem>
+  </ModalItem>
 </template>
 
 <script lang="ts" setup>
@@ -30,7 +30,7 @@ const options = ['Cover', 'Contain', 'Fill', 'Scale-down']
 const selectedOption = ref(options[0])
 const imageFile = ref(null)
 const imageURL = ref('')
-defineEmits(['return'])
+defineEmits(['return', 'close'])
 
 const onFileSelected = ((e: any) => {
   imageFile.value = e.target.files[0]
