@@ -14,21 +14,21 @@ const { settings, items } = storeToRefs(gridStore)
     <div class="flex w-full justify-between">
       <UButton label="Button" @click="isOpen = true" />
       <UPopover :popper="{ placement: 'bottom-end', offsetDistance: 12 }">
-        <UButton icon="i-heroicons-adjustments-horizontal" color="primary" variant="soft" :ui="{ rounded:'rounded-md'}" />
+        <UButton icon="i-heroicons-adjustments-horizontal" color="gray" variant="soft" :ui="{ rounded:'rounded-md'}" />
         <template #panel>
           <div class="flex flex-col p-4 w-80 gap-y-2">
             <UiAccordion label="Column number" description="The number of columns in the grid">
               <template #action>
                 <div class="flex w-1/3 justify-between items-center">
-                  <UButton icon="i-heroicons-minus" color="primary" class="p-1" square variant="ghost" @click.prevent="gridStore.decrementColNum" />
+                  <UButton icon="i-heroicons-minus" color="gray" class="p-1" square variant="ghost" @click.prevent="gridStore.decrementColNum" />
                   <span class="whitespace-nowrap px-2">{{ settings.colNum }}</span>
-                  <UButton icon="i-heroicons-plus" color="primary" class="p-1" square variant="ghost" @click.prevent="gridStore.incrementColNum" />
+                  <UButton icon="i-heroicons-plus" color="gray" class="p-1" square variant="ghost" @click.prevent="gridStore.incrementColNum" />
                 </div>
               </template>
             </UiAccordion>
             <UiAccordion label="Rounded items" description="Make border of items in the grid rounded">
               <template #action>
-                <UToggle v-model="roundedItems" />
+                <UToggle v-model="roundedItems" color="gray" />
               </template>
               <template #content>
                 <ul class="flex w-full gap-x-2 rounded-b-lg p-1 pt-0">
@@ -57,17 +57,17 @@ const { settings, items } = storeToRefs(gridStore)
             </UiAccordion>
             <UiAccordion label="Free grid" description="Allow items to be moved freely without vertical shrink">
               <template #action>
-                <UToggle v-model="freeGrid" />
+                <UToggle v-model="freeGrid" color="gray" />
               </template>
             </UiAccordion>
             <UiAccordion label="Prevent collision" description="Allow items to move other items when dragging them">
               <template #action>
-                <UToggle v-model="preventCollision" />
+                <UToggle v-model="preventCollision" color="gray" />
               </template>
             </UiAccordion>
             <UiAccordion label="Show grid" description="Show grid for better visualisation of the layout">
               <template #action>
-                <UToggle v-model="showGrid" />
+                <UToggle v-model="showGrid" color="gray" />
               </template>
             </UiAccordion>
           </div>
@@ -78,11 +78,12 @@ const { settings, items } = storeToRefs(gridStore)
     <ClientOnly>
       <div :class="{'h-screen' : !(Array.isArray(items) && items.length)}">
         <GridLayout v-if="Array.isArray(items) && items.length" v-model:layout="items" class="lg:w-[960px] xl:w-[1200px]" :prevent-collision="preventCollision" :row-height="gridStore.getRowHeightForSquare" :col-num="settings.colNum" :is-resizable="true" :is-draggable="true" :auto-size="true" :show-grid-lines="showGrid" :vertical-compact="!freeGrid">
-          <GridItem v-for="item in items" :key="item.i" :show-close-button="false" :is-resizable="true" :enable-edit-mode="true" :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="item.i" :use-border-radius="roundedItems" :border-radius="Number(settings.borderRadius.replace(/\D/g, ''))" class="relative border border-solid">
-            <ItemImage v-if="item.componentId === 1" :values="item.values" @remove="gridStore.removeItem(item)" />
-            <!-- Fix it -->
-            <ItemRadialChart v-else-if="item.componentId === 2" :values="item.values" @remove="gridStore.removeItem(item)" />
-          </GridItem>
+          <template v-for="item in items" :key="item.i">
+            <GridItem :show-close-button="false" :is-resizable="true" :enable-edit-mode="true" :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="item.i" :use-border-radius="roundedItems" :border-radius="Number(settings.borderRadius.replace(/\D/g, ''))" class="relative" :class="[settings.themes[item.customTheme ? item.customTheme :settings.currentTheme]]" :preserveAspectRatio="item.preserveAspectRatio">
+              <ItemImage v-if="item.componentId === 1" :values="item.values" @remove="gridStore.removeItem(item)" />
+              <ItemRadialChart v-else-if="item.componentId === 2" :values="item.values" @remove="gridStore.removeItem(item)" />
+            </GridItem>
+          </template>
         </GridLayout>
       </div>
     </ClientOnly>

@@ -1,5 +1,8 @@
 <template>
-  <SettingsItem v-model="values" label="Image" :component-id="1" @return="$emit('return')">
+  <SettingsItem v-model="values" label="Image" :component-id="1" :is-submitable="imageFile != null && imageURL != ''" @return="$emit('return')">
+    <template #preview>
+      <ItemImage :values="values" />
+    </template>
     <template #content>
       <div class="flex flex-col gap-y-4">
         <UFormGroup label="Fit option">

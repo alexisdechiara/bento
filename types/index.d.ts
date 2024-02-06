@@ -10,6 +10,9 @@ declare global {
     w?: number
     i?: any
     values: any
+    customTheme?: string
+    customCss?: string
+    preserveAspectRatio?: boolean
   }
 
   interface ImageItem {

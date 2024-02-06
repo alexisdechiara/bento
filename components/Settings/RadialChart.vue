@@ -1,5 +1,8 @@
 <template>
-  <SettingsItem v-model="values" label="Radial Chart" :component-id="2" @return="$emit('return')">
+  <SettingsItem v-model="values" label="Radial Chart" :component-id="2" :preserve-aspect-ratio="true" :is-submitable="stats.length > 0" @return="$emit('return')">
+    <template #preview>
+      <ItemRadialChart :values="values" />
+    </template>
     <template #content>
       <div class="grid grid-cols-2">
         <ClientOnly>
@@ -9,27 +12,27 @@
         </ClientOnly>
         <div class="flex flex-col h-full gap-y-4">
           <UFormGroup label="Type">
-            <USelectMenu ref="chart" v-model="selectedChartType" :options="chartType" option-attribute="label" @change="updateChartOptions" />
+            <USelectMenu ref="chart" v-model="selectedChartType" :options="chartType" option-attribute="label" />
           </UFormGroup>
           <div class="flex w-full items-center gap-x-4">
-            <UInput v-model="chartTitle" placeholder="Chart title" class="w-full" :disabled="!showTitle" @change="updateChartOptions" />
-            <UToggle v-model="showTitle" @update:model-value="updateChartOptions" />
+            <UInput v-model="chartTitle" placeholder="Chart title" class="w-full" :disabled="!showTitle" />
+            <UToggle v-model="showTitle" />
           </div>
           <div class="flex w-full items-center gap-x-4">
             <label class="w-full grow">Show total value</label>
-            <UToggle v-model="showTotalValue" @update:model-value="updateChartOptions" />
+            <UToggle v-model="showTotalValue" />
           </div>
           <div class="max-h-72 overflow-auto">
             <UTable :empty-state="{ icon: 'i-heroicons-circle-stack-20-solid', label: 'No data' }" :rows="stats" :columns="colums" :ui="{ td: { base: 'w-min', padding: 'p-0' } }">
               <template #label-data="{ row }">
-                <input v-model.lazy="row.label" type="text" class="px-3 py-4 w-full" @change="updateChartOptions"> 
+                <input v-model.lazy="row.label" type="text" class="px-3 py-4 w-full">
               </template>
               <template #value-data="{ row }">
-                <input v-model.lazy="row.value" type="number" min="0" class="px-3 py-4 w-full" @change="updateChartOptions">
+                <input v-model.lazy="row.value" type="number" min="0" class="px-3 py-4 w-full">
               </template>
               <template #color-data="{ row }">
                 <div class="flex justify-center items-center px-3 py-4 w-20">
-                  <ColorPicker v-model:pureColor="row.color" format="hex6" shape="circle" round-history lang="En" @update:pure-color="updateChartOptions" />
+                  <ColorPicker v-model:pureColor="row.color" format="hex6" shape="circle" round-history lang="En" />
                 </div>
               </template>
               <template #actions-data="{ row, index }">
@@ -86,13 +89,12 @@ const stats = reactive([
   }
 ])
 
-const tableActions = (row, index) => [
+const tableActions = (row: any, index: number) => [
   [{
     label: 'Duplicate',
     icon: 'i-heroicons-document-duplicate-20-solid',
     click: () => {
       stats.splice(index + 1, 0, { ...row })
-      updateChartOptions()
     }
   },{
     label: 'Move up',
@@ -101,7 +103,6 @@ const tableActions = (row, index) => [
     click: () => {
       if (index > 0) {
         stats.splice(index - 1, 0, stats.splice(index, 1)[0])
-        updateChartOptions()
       }
     }
   },{
@@ -111,7 +112,6 @@ const tableActions = (row, index) => [
     click: () => {
       if (index < stats.length - 1) {
         stats.splice(index + 1, 0, stats.splice(index, 1)[0])
-        updateChartOptions()
       }
     }
   }], [{
@@ -123,7 +123,6 @@ const tableActions = (row, index) => [
         value: 0,
         color: '#000000'
       })
-      updateChartOptions()
     }
   }, {
     label: 'Delete',
@@ -209,7 +208,7 @@ const updateChartOptions = (() => {
             endAngle: selectedChartType.value.angles[1],
           },
           hollow: {
-            
+
           },
           dataLabels: {
             total: {
@@ -223,6 +222,10 @@ const updateChartOptions = (() => {
       colors: colors.value,
     }
   }
+})
+
+watch([stats, showTitle, showTotalValue, selectedChartType, chartTitle], () => {
+  updateChartOptions()
 })
 
 const values = computed(() => ({
