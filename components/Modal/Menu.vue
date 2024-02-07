@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!componentName" class="flex gap-x-4 h-[66vh] w-full">
+  <div v-if="!componentName" class="flex gap-x-4 size-full">
     <UTabs :items="filters" orientation="vertical" :ui="{ container:'w-full h-full px-6 py-5 overflow-auto', wrapper: 'flex items-center', list: { padding: 'p-2', width: 'w-48 h-full rounded-none' } }">
       <template #item="{ item }">
         <div class="grid grid-cols-2 gap-4 ">
@@ -17,7 +17,7 @@
     </UTabs>
   </div>
 
-  <div v-else class="flex flex-col px-4 py-5 sm:p-6">
+  <div v-else class="flex flex-col px-4 py-5 sm:p-6 size-full relative gap-y-2">
     <component :is="componentName" @return="componentName = ''" @close="$emit('close')" />
   </div>
 </template>

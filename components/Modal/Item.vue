@@ -1,5 +1,5 @@
 <template>
-  <div class="pb-5 flex justify-between w-full h-fit">
+  <div class="flex justify-between w-full h-fit">
     <UButton :padded="false" color="gray" variant="link" icon="i-heroicons-arrow-left" @click="$emit('return')" />
     <UTabs :items="items" @change="onChangeTab" />
     <span />
@@ -9,8 +9,8 @@
     <slot name="content" />
   </template>
 
-  <div v-else-if="currentTab === 1" class="flex flex-col gap-y-2">
-    <div class="flex gap-x-6 justify-center">
+  <div v-else-if="currentTab === 1" class="flex flex-col h-full">
+    <div class="flex gap-x-6 justify-center h-[22rem]">
       <div class="flex grow justify-center items-center background-grid">
         <div class="flex justify-center items-center w-64 h-64 overflow-auto">
           <div :class="[width > height ? 'w-3/4' : 'h-3/4', customCSS]" class="relative flex justify-center items-center box overflow-hidden">
@@ -18,7 +18,7 @@
           </div>
         </div>
       </div>
-      <div class="flex flex-col gap-y-4 w-80">
+      <div class="flex flex-col gap-y-4 w-80 h-full">
         <div class="flex justify-between gap-x-4 w-full">
           <UFormGroup label="Width">
             <UInput :value="width" min="1" type="number" required @change="updateWidth(width, $event)">
@@ -47,7 +47,7 @@
             </UInput>
           </UFormGroup>
         </div>
-        <div class="flex flex-col w-full gap-y-4">
+        <div class="flex flex-col w-full gap-y-4 overflow-auto no-scrollbar p-1">
           <UIExpandingRadio id="defaultRadio" v-model="customTheme" label="Default" name="customTheme" value="default" :src="'/image/landscape.png'">
             <template #content="{ open }">
               <div class="flex size-full justify-center items-center transition-opacity duration-500" :class="open ? 'opacity-100' : 'opacity-0'">
@@ -69,7 +69,7 @@
         </div>
       </div>
     </div>
-    <UButton block class="mt-4 col-span-2" :disabled="!isSubmitable" @click="onSubmit()">
+    <UButton block class="col-span-2 mt-auto" :disabled="!isSubmitable" @click="onSubmit()">
       Submit
     </UButton>
   </div>
@@ -154,6 +154,16 @@ const onSubmit = (() => {
 </script>
 
 <style lang="scss" scoped>
+
+.no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+     /* Hide scrollbar for IE, Edge and Firefox */
+      .no-scrollbar {
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+    }
+
 .background-grid {
   background-image: radial-gradient(black 5%, transparent 5%);
   background-size: 15px 15px;

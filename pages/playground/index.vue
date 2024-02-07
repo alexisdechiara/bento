@@ -4,7 +4,7 @@
       <UButton label="Button" @click="isOpen = true" />
       <Settings />
     </div>
-    <UModal v-model="isOpen" fullscreen :ui="{ paddin: 'p-0', fullscreen: 'w-3/5 h-3/5 rounded-lg' }">
+    <UModal v-model="isOpen" :ui="{ paddin: 'p-0', width: 'w-[66vw] sm:max-w-none', height: 'h-[75vh]' }">
       <ModalMenu @close="isOpen = false" />
     </UModal>
     <UDivider class="py-4" />

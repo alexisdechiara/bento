@@ -4,7 +4,7 @@
       <ItemRadialChart :values="values" />
     </template>
     <template #content>
-      <div class="grid grid-cols-2">
+      <div class="grid grid-cols-2 size-full overflow-hidden">
         <ClientOnly>
           <div class="chart flex justify-center items-center w-full">
             <apexchart type="radialBar" height="66%" :options="chartOptions" :series="series" />
@@ -22,7 +22,7 @@
             <label class="w-full grow">Show total value</label>
             <UToggle v-model="showTotalValue" />
           </div>
-          <div class="max-h-72 overflow-auto">
+          <div class="max-h-60 overflow-auto">
             <UTable :empty-state="{ icon: 'i-heroicons-circle-stack-20-solid', label: 'No data' }" :rows="stats" :columns="colums" :ui="{ td: { base: 'w-min', padding: 'p-0' } }">
               <template #label-data="{ row }">
                 <input v-model.lazy="row.label" type="text" class="px-3 py-4 w-full">

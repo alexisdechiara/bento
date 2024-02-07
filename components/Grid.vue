@@ -4,8 +4,7 @@
       <GridLayout v-if="Array.isArray(items) && items.length" v-model:layout="items" class="lg:w-[960px] xl:w-[1200px]" :prevent-collision="settings.preventCollision" :row-height="gridStore.getRowHeightForSquare" :col-num="settings.colNum" :is-resizable="true" :is-draggable="true" :auto-size="true" :show-grid-lines="settings.showGrid" :vertical-compact="!settings.freeGrid">
         <template v-for="item in items" :key="item.i">
           <GridItem :show-close-button="false" :is-resizable="true" :enable-edit-mode="true" :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="item.i" :use-border-radius="settings.roundedItems" :border-radius="Number(settings.borderRadius.replace(/\D/g, ''))" class="relative" :class="[settings.themes[item.customTheme ? item.customTheme : settings.currentTheme]]" :preserveAspectRatio="item.preserveAspectRatio">
-            <ItemImage v-if="item.componentId === 1" :values="item.values" @remove="gridStore.removeItem(item)" />
-            <ItemRadialChart v-else-if="item.componentId === 2" :values="item.values" @remove="gridStore.removeItem(item)" />
+            <component :is="getItemNameById(item.componentId)" v-bind="{values: item.values}" @remove="gridStore.removeItem(item)" />
           </GridItem>
         </template>
       </GridLayout>
@@ -17,6 +16,8 @@
 import { GridItem, GridLayout } from 'vue-ts-responsive-grid-layout'
 const gridStore = useGridStore()
 const { settings, items } = storeToRefs(gridStore)
+
+const {getItemNameById} = useItemsName()
 </script>
 
 <style lang="scss" scoped>
