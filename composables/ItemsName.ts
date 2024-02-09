@@ -1,9 +1,10 @@
 export const useItemsName = () => {
 
   const items = [
-    '',
-    'ItemImage',
-    'ItemRadialChart',
+    '', // 0
+    'ItemImage', // 1
+    'ItemRadialChart', // 2
+    'ItemTitle', // 3
   ]
 
   function getItemNameById(id: number) {

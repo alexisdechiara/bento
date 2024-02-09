@@ -14,7 +14,7 @@
       <div class="flex grow justify-center items-center background-grid">
         <div class="flex justify-center items-center w-64 h-64 overflow-auto">
           <div :class="[width > height ? 'w-3/4' : 'h-3/4', customCSS]" class="relative flex justify-center items-center box overflow-hidden">
-            <slot v-if="$slots.preview && modelValue && isSubmitable" name="preview" />
+            <slot v-if="$slots.preview && values && isSubmitable" name="preview" />
           </div>
         </div>
       </div>
@@ -81,25 +81,20 @@ const { settings } = storeToRefs(gridStore)
 
 const emit = defineEmits(['return', 'close'])
 
-const currentTab = ref(0)
-const customTheme = ref('default')
-const width = ref(1)
-const height = ref(1)
-
+const customTheme = defineModel('default', { type: String, default: 'default' })
+const width = defineModel('width', { type: Number, default: 1 })
+const height = defineModel('height', { type: Number, default: 1 })
 const label = defineModel('label', { type: String, default: '' })
-const componentId = defineModel('componentId', { type: Number, required: true })
-const modelValue = defineModel('modelValue', { type: Object, default: () => ({}) })
+
+const currentTab = ref(0)
+
 const preserveAspectRatio = defineModel('preserveAspectRatio', { type: Boolean, default: false })
-const props = defineProps({
-  lockAspectRatioInput: {
-    type: Boolean,
-    default: false
-  },
-  isSubmitable: {
-    type: Boolean,
-    default: false
-  },
-})
+const props = defineProps<{
+  values: any,
+  lockAspectRatioInput?: boolean,
+  isSubmitable?: boolean
+  componentId: number
+}>()
 
 const lockAspectRatioInput = props.lockAspectRatioInput || preserveAspectRatio.value
 
@@ -139,11 +134,11 @@ const onSubmit = (() => {
   const gridStore = useGridStore()
   const item: Item = {
     label: label.value,
-    componentId: componentId.value,
+    componentId: props.componentId,
     h: height.value,
     w: width.value,
     customTheme: customTheme.value == 'default' ? undefined : customTheme.value,
-    values: modelValue.value,
+    values: props.values,
     preserveAspectRatio: preserveAspectRatio.value
   }
   if (props.isSubmitable) {

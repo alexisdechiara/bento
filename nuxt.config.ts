@@ -8,7 +8,8 @@ export default defineNuxtConfig({
     '@nuxtjs/fontaine',
     '@nuxtjs/google-fonts',
     'nuxt-og-image',
-    '@pinia/nuxt'
+    '@pinia/nuxt',
+    'nuxt-tiptap-editor'
   ],
   ui: {
     icons: ['heroicons', 'simple-icons']
@@ -24,7 +25,10 @@ export default defineNuxtConfig({
       'DM+Sans': [400, 500, 600, 700]
     }
   },
+  tiptap: {
+    prefix: 'Tiptap',
+  },
   // Devtools / Typescript
-  devtools: { enabled: true },
+  devtools: { enabled: false },
   typescript: { strict: false }
 })

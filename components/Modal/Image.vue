@@ -1,5 +1,5 @@
 <template>
-  <ModalItem v-model="values" label="Image" :component-id="1" :is-submitable="imageFile != null && imageURL != ''" @return="$emit('return')" @close="$emit('close')">
+  <ModalItem :values="values" label="Image" :component-id="1" :is-submitable="imageFile != null && imageURL != ''" @return="$emit('return')" @close="$emit('close')">
     <template #preview>
       <ItemImage :values="values" />
     </template>

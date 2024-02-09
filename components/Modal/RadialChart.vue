@@ -1,5 +1,5 @@
 <template>
-  <ModalItem v-model="values" label="Radial Chart" :component-id="2" :preserve-aspect-ratio="true" :is-submitable="stats.length > 0" @return="$emit('return')" @close="$emit('close')">
+  <ModalItem :values="values" label="Radial Chart" :component-id="2" :preserve-aspect-ratio="true" :is-submitable="stats.length > 0" @return="$emit('return')" @close="$emit('close')">
     <template #preview>
       <ItemRadialChart :values="values" />
     </template>
