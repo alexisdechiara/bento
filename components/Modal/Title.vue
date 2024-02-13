@@ -1,5 +1,5 @@
 <template>
-  <ModalItem :values="editor ? editor.getHTML() : ''" :width="3" :height="2" label="Title" :component-id="3" :is-submitable="true" @return="$emit('return')" @close="$emit('close')">
+  <ModalItem :values="editor ? editor.getHTML() : ''" :width="3" :height="2" label="Title" :component-id="3" :is-submitable="editor != null" @return="$emit('return')" @close="$emit('close')">
     <template #preview>
       <ItemTitle :values="editor ? editor.getHTML() : ''" />
     </template>

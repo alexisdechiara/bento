@@ -6,7 +6,7 @@
           <template v-if="item.label === 'Content' || item.label === 'All'">
             <UICard title="Image" description="An image that can be edit to shrink in a bento box" icon="i-ic-round-landscape" @click="setComponent(ModalImage)" />
             <UICard title="Title" description="The title of the layout displayed in big" icon="i-ci-heading-h1" @click="setComponent(ModalTitle)" />
-            <UICard title="Text" description="A text to add description or data about the content" icon="i-heroicons-bars-3-bottom-left" @click="setComponent(ModalImage)" />
+            <UICard title="Text" description="A text to add description or data about the content" icon="i-heroicons-bars-3-bottom-left" @click="setComponent(ModalText)" />
           </template>
           <template v-if="item.label === 'Chart' || item.label === 'All'">
             <UICard title="Radial Chart" description="A radial chart displays data as a percentage" icon="i-tdesign-chart-radial" @click="setComponent(ModalRadialChart)" />
@@ -28,6 +28,7 @@
 import ModalTitle  from './Title.vue'
 import ModalImage from './Image.vue'
 import ModalRadialChart from './RadialChart.vue'
+import ModalText from './Text.vue'
 
 const componentName = ref('')
 defineEmits(['close'])
