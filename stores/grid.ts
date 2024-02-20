@@ -15,10 +15,8 @@ export const useGridStore = defineStore({
       currentTheme: 'Classic' as string,
       themes: {
         Classic: 'bg-white border border-solid border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800',
-        Apple: 'bg-[#ececec] dark:bg-[#2b2b2b] dark:text-white',
-        // Material: 'bg-[#F7F2FA] dark:bg-[#1E1E1E] dark:text-white',
-        // Shadow: 'bg-white border-0 dark:bg-gray-900 shadow-[0px_0px_20px_1px_rgb(0_0_0_/_0.05)]',
-        'Neo Memphis': 'bg-white border-2 border-black dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200'
+        Apple: 'bg-gray-100 dark:bg-gray-900 dark:text-white',
+        Shadow: 'bg-white border-0 dark:bg-gray-900 shadow-sm',
       }
     },
     items: [] as Array<Item>

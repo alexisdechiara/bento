@@ -41,7 +41,7 @@ pricing:
   headline: Pricing
   title: A plan for every need
   description: And you can always create and export a layout without an account!
-  plans: 
+  plans:
     - title: Essential
       description: The bare essentials without the need to log on
       price: Free
