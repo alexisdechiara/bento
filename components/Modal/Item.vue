@@ -131,6 +131,7 @@ const updateHeight = ((oldValue: number, event: any) => {
 })
 
 const onSubmit = (() => {
+  console.log(props.values)
   const gridStore = useGridStore()
   const item: Item = {
     label: label.value,
@@ -151,13 +152,13 @@ const onSubmit = (() => {
 <style lang="scss" scoped>
 
 .no-scrollbar::-webkit-scrollbar {
-        display: none;
-      }
-     /* Hide scrollbar for IE, Edge and Firefox */
-      .no-scrollbar {
-        -ms-overflow-style: none;  /* IE and Edge */
-        scrollbar-width: none;  /* Firefox */
-    }
+    display: none;
+  }
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
 
 .background-grid {
   background-image: radial-gradient(black 5%, transparent 5%);

@@ -1,7 +1,7 @@
 <template>
-  <div class="relative">
-    <div class="bg-background border-gradient rounded-xl p-4">
-      <div class="aspect-w-16 aspect-h-9 rounded-lg relative overflow-hidden border border-dashed border-gray-950/10 dark:border-white/10">
+  <div class="relative size-full">
+    <div class="bg-background border-gradient rounded-xl p-4 size-full">
+      <div class="rounded-lg size-full relative overflow-hidden border border-dashed border-gray-950/10 dark:border-white/10">
         <svg class="absolute inset-0 h-full w-full stroke-gray-950/10 dark:stroke-white/10" fill="none">
           <defs>
             <pattern

@@ -18,7 +18,7 @@ defineOgImage({
 <template>
   <div>
     <HomepageHero :title="page.hero.title" :description="page.hero.description" :links="page.hero.links">
-      <Placeholder />
+      <Placeholder class="h-dvh" />
     </HomepageHero>
 
     <HomepageSection id="features" :title="page.features.title" :description="page.features.description" :headline="page.features.headline">

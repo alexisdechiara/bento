@@ -2,18 +2,19 @@ export const useItemsName = () => {
 
   const items = [
     '', // 0
-    'ItemImage', // 1
-    'ItemRadialChart', // 2
-    'ItemTitle', // 3
-    'ItemText', //4
+    'Image', // 1
+    'RadialChart', // 2
+    'Title', // 3
+    'Text', //4
+    'Placeholder', //5
   ]
 
   function getItemNameById(id: number) {
-    return items[id]
+    return 'Item' + items[id]
   }
 
   function getItemIdByName(name: string) {
-    return items.indexOf(name)
+    return items.findIndex( item => item.toLowerCase() === name.toLowerCase() )
   }
 
   return {
