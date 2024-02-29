@@ -9,6 +9,9 @@
             <UICard title="Text" description="A text to add description or data about the content" icon="i-heroicons-bars-3-bottom-left" @click="setComponent(ModalText)" />
             <UICard title="Placeholder" description="An empty item used for filling the space" icon="i-ph-placeholder" @click="setComponent(ModalPlaceholder)" />
           </template>
+          <template v-if="item.label === 'Tools' || item.label === 'All'">
+            <UICard title="Date and time" description="A date and time picker for showing calendar information" icon="i-heroicons-calendar" @click="setComponent(ModalDate)" />
+          </template>
           <template v-if="item.label === 'Chart' || item.label === 'All'">
             <UICard title="Radial Chart" description="A radial chart displays data as a percentage" icon="i-tdesign-chart-radial" @click="setComponent(ModalRadialChart)" />
             <!-- <UICard title="Line Chart" description="Displays data points over a continuous interval, often used to show trends" icon="i-lucide-line-chart" @click="setComponent(ModalImage)" />
@@ -31,6 +34,7 @@ import ModalImage from './Image.vue'
 import ModalRadialChart from './RadialChart.vue'
 import ModalText from './Text.vue'
 import ModalPlaceholder from './Placeholder.vue'
+import ModalDate from './Date.vue'
 
 const componentName = ref('')
 defineEmits(['close'])

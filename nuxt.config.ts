@@ -9,7 +9,8 @@ export default defineNuxtConfig({
     '@nuxtjs/google-fonts',
     'nuxt-og-image',
     '@pinia/nuxt',
-    'nuxt-tiptap-editor'
+    'nuxt-tiptap-editor',
+    '@samk-dev/nuxt-vcalendar'
   ],
   ui: {
     icons: ['heroicons', 'simple-icons']

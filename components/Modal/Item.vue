@@ -2,7 +2,8 @@
   <div class="flex justify-between w-full h-fit">
     <UButton :padded="false" color="gray" variant="link" icon="i-heroicons-arrow-left" @click="$emit('return')" />
     <UTabs :items="items" @change="onChangeTab" />
-    <span />
+    <slot v-if="$slots.action" name="action" />
+    <span v-else />
   </div>
 
   <template v-if="currentTab === 0">
