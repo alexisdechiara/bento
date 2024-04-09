@@ -14,8 +14,8 @@
           </template>
           <template v-if="item.label === 'Chart' || item.label === 'All'">
             <UICard title="Radial Chart" description="A radial chart displays data as a percentage" icon="i-tdesign-chart-radial" @click="setComponent(ModalRadialChart)" />
-            <!-- <UICard title="Line Chart" description="Displays data points over a continuous interval, often used to show trends" icon="i-lucide-line-chart" @click="setComponent(ModalImage)" />
-            <UICard title="Bar Chart" description="Represents data using rectangular bars, where the length of each bar corresponds to the value it represents" icon="i-lucide-bar-chart-3" @click="setComponent(ModalImage)" />
+            <UICard title="Line Chart" description="Displays data points over a continuous interval, often used to show trends" icon="i-lucide-line-chart" @click="setComponent(LineChart)" />
+            <!-- <UICard title="Bar Chart" description="Represents data using rectangular bars, where the length of each bar corresponds to the value it represents" icon="i-lucide-bar-chart-3" @click="setComponent(ModalImage)" />
             <UICard title="Pie Chart" description="Illustrates data in a circular graph, with each slice representing a proportion of the whole" icon="i-heroicons-chart-pie" @click="setComponent(ModalImage)" /> -->
           </template>
         </div>
@@ -35,6 +35,7 @@ import ModalRadialChart from './RadialChart.vue'
 import ModalText from './Text.vue'
 import ModalPlaceholder from './Placeholder.vue'
 import ModalDate from './Date.vue'
+import LineChart from './LineChart.vue'
 
 const componentName = ref('')
 defineEmits(['close'])

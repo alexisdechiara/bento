@@ -30,6 +30,6 @@ export default defineNuxtConfig({
     prefix: 'Tiptap',
   },
   // Devtools / Typescript
-  devtools: { enabled: false },
+  devtools: { enabled: true },
   typescript: { strict: false }
 })

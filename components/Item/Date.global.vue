@@ -18,7 +18,7 @@ defineEmits(['remove', 'edit'])
 </script>
 
 <template>
-  <div class="relative size-full group @container">
+  <div class="relative size-full group container-query">
     <div v-if="values.isRange" class="flex size-full justify-center items-center gap-x-2">
       <template v-if="values.timeMode === 'date'">
         <template v-for="item, key in values.range" :key="key">
@@ -54,21 +54,21 @@ defineEmits(['remove', 'edit'])
     </div>
     <template v-else>
       <div v-if="values.timeMode === 'date'" class="flex flex-col size-full justify-center items-center">
-        <div class="text-sm @[5rem]:text-md @[10rem]:text-lg @[15rem]:text-xl @[20rem]:text-2xl @[25rem]:text-3xl @[30rem]:text-4xl">
+        <div class="date-month">
           {{ format(values.date, 'MMM, yyy') }}
         </div>
-        <div class="font-bold text-3xl @[5rem]:text-4xl @[10rem]:text-5xl @[15rem]:text-6xl @[20rem]:text-7xl @[25rem]:text-8xl @[30rem]:text-9xl">
+        <div class="date-day">
           {{ format(values.date, 'dd') }}
         </div>
       </div>
       <div v-else class="flex flex-col size-full justify-center items-center">
-        <div v-if="values.timeMode === 'datetime'" class="absolute left-2 @[10rem]:left-4 top-4 text-xs @[10rem]:text-lg">
+        <div v-if="values.timeMode === 'datetime'" class="absolute left-2 @[10rem]:left-4 top-4 datetime-date">
           {{ format(values.date, 'MMM dd, yyy') }}
         </div>
-        <div :class="{'-mb-2 @[10rem]:-mb-0' : values.timeMode === 'datetime'}" class="leading-none font-bold text-lg @[5rem]:text-xl @[10rem]:text-5xl @[15rem]:text-6xl @[20rem]:text-7xl @[25rem]:text-8xl @[30rem]:text-9xl">
+        <div class="font-bold datetime-hour">
           {{ format(values.date, values.timeFormat === '24 hours' ? 'hh' : 'HH') }}
         </div>
-        <div :class="{'-mb-6 @[10rem]:-mb-4': values.timeMode === 'datetime' }" class="font-light text-lg @[5rem]:text-xl @[10rem]:text-5xl @[15rem]:text-6xl @[20rem]:text-7xl @[25rem]:text-8xl @[30rem]:text-9xl">
+        <div class="font-light datetime-minute">
           {{ format(values.date, 'mm') }}
         </div>
       </div>
@@ -77,3 +77,33 @@ defineEmits(['remove', 'edit'])
     <UButton icon="i-heroicons-trash" size="2xs" color="red" variant="soft" class="absolute invisible group-hover:visible bottom-4 right-4 z-10" @click="$emit('remove')" />
   </div>
 </template>
+
+<style lang="scss">
+
+.container-query {
+  container-type: size;
+}
+
+.date-month {
+  font-size: clamp(min(15cqh, 15cqw), 2cqw, max(20cqh, 20cqw));
+}
+
+.date-day {
+  font-size: clamp(min(20cqh, 20cqw), 3cqw, max(25cqh, 25cqw));
+  font-weight: bold;
+}
+
+.datetime-date {
+  font-size: clamp(min(7cqh, 7cqw), 0.75rem, max(10cqh, 10cqw));
+}
+
+.datetime-hour,.datetime-minute {
+  font-size: clamp(min(30cqh, 30cqw), 3cqw, max(35cqh, 35cqw));
+  line-height: 1;
+}
+
+.datetime-date~.datetime-hour,.datetime-date ~.datetime-minute {
+  font-size: clamp(min(20cqh, 20cqw), 3cqw, max(25cqh, 25cqw));
+  translate: 0 8px;
+}
+</style>
