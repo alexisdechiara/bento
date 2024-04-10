@@ -32,24 +32,25 @@ declare global {
 
   interface LineChartItem {
     options: {
-      title: {
-        showTitle: boolean
-        value: string
-      };
-      xAxis: {
+      axis: {
+        x: {
+          show: boolean
+          label: string
+          labelSize: number
+          options: string[]
+        }
+        y: {
+          show: boolean
+          label: string
+          labelSize: number
+          options: string[]
+        }
+      }
+      annotations: AnnotationItem[]
+      crosshair: {
         show: boolean
-        label: string
-        labelSize: number
-        options: string[]
-      };
-      yAxis: {
-        show: boolean
-        label: string
-        labelSize: number
-        options: string[]
-      };
-      annotations: AnnotationItem[],
-      crosshair:(d: DataRecord) => string,
+        value: (d: DataRecord) => string
+      }
       line: {
         type: string
         color: string

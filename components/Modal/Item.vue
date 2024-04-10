@@ -10,7 +10,11 @@
     <slot name="content" />
   </template>
 
-  <div v-else-if="currentTab === 1" class="flex flex-col h-full">
+  <template v-else-if="$slots.settings && currentTab === 1">
+    <slot name="settings" />
+  </template>
+
+  <div v-else class="flex flex-col h-full">
     <div class="flex gap-x-6 justify-center h-[22rem]">
       <div class="flex grow justify-center items-center background-grid">
         <div class="flex justify-center items-center w-64 h-64 overflow-auto">
@@ -77,6 +81,8 @@
 </template>
 
 <script lang="ts" setup>
+
+const slots = useSlots()
 const gridStore = useGridStore()
 const { settings } = storeToRefs(gridStore)
 
@@ -87,7 +93,7 @@ const width = defineModel('width', { type: Number, default: 1 })
 const height = defineModel('height', { type: Number, default: 1 })
 const label = defineModel('label', { type: String, default: '' })
 
-const currentTab = ref(0)
+const currentTab = ref<number>(0)
 
 const preserveAspectRatio = defineModel('preserveAspectRatio', { type: Boolean, default: false })
 const props = defineProps<{
@@ -105,11 +111,20 @@ const customCSS = computed(() => {
 
 const themes = Object.keys(settings.value.themes).filter((theme) => theme !== settings.value.currentTheme)
 
-const items = [{
-  label: 'Content',
-}, {
-  label: 'Item',
-  }]
+const items = [
+  {
+    label: 'Content',
+  },
+  {
+    label: 'Item',
+  }
+]
+
+if(slots.settings) {
+  items.splice(1, 0, {
+    label: 'Settings',
+  })
+}
 
 const onChangeTab = ((index: number) => {
   currentTab.value = index

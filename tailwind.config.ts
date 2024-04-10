@@ -11,7 +11,9 @@ export default <Partial<Config>>{
     safelist: [
       { pattern: /object-(cover|fill|contain|scale-down)/ },
       { pattern: /^(col|row)-span-(1[0-2]|[1-9])$/ },
-      { pattern: /bg-(blue|red|green|yellow|orange|violet|red)-(500|200)$/}
+      { pattern: /bg-(blue|red|green|emerald|yellow|amber|orange|violet|red)-(700|500|200)$/,
+        variants: ['hover', 'focus', 'active', 'peer-hover', 'peer-focus', 'peer-active', 'peer-checked' ]
+      }
   ],
   },
   plugins: [
