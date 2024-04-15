@@ -8,11 +8,11 @@ useSeoMeta({
   ogDescription: page.value.description
 })
 
-defineOgImage({
-  component: 'Homepage',
-  title: page.value.title,
-  description: page.value.description
-})
+// defineOgImage({
+//   component: 'Homepage',
+//   title: page.value.title,
+//   description: page.value.description
+// })
 </script>
 
 <template>
@@ -33,8 +33,8 @@ defineOgImage({
       </HomepagePricingGrid>
     </HomepageSection>
 
-    <ULandingSection id="faq" :title="page.faq.title" :description="page.faq.description">
-      <!-- <ULandingFAQ
+    <HomepageSection id="faq" :title="page.faq.title" :description="page.faq.description">
+      <HomepageFAQ
         multiple
         :items="page.faq.items"
         :ui="{
@@ -46,7 +46,7 @@ defineOgImage({
           }
         }"
         class="max-w-4xl mx-auto"
-      /> -->
-    </ULandingSection>
+      />
+    </HomepageSection>
   </div>
 </template>

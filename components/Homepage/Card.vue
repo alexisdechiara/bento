@@ -45,11 +45,13 @@ import { twJoin } from 'tailwind-merge'
 import type { Link } from '#ui/types'
 import colors from '#tailwind-config/theme/colors'
 import { card as cardConfig } from '#ui/ui.config'
+import { useMouseInElement  } from '@vueuse/core'
 
 const el = ref<HTMLDivElement>()
 
+
 const slots = useSlots()
-const { elementX, elementY } = useSharedMouseInElement(el)
+const { elementX, elementY } = useMouseInElement(el)
 
 defineOptions({
   inheritAttrs: false

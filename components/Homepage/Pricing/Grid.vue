@@ -16,7 +16,7 @@ const props = defineProps<{
 }>()
 
 const config = {
-  wrapper: 'flex flex-col lg:grid lg:grid-cols-3 w-full justify-center items-center gap-8'
+  wrapper: 'flex flex-col lg:grid lg:grid-cols-2 w-full justify-center items-center gap-16'
 }
 
 const { ui, attrs } = useUI('pricing.grid', toRef(props, 'ui'), config, toRef(props, 'class'), true)

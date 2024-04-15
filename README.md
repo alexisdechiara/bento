@@ -1,16 +1,4 @@
-# Nuxt UI Pro - Landing template
-
-This starter lets you get started with [Nuxt UI Pro](https://ui.nuxt.com/pro) quickly.
-
-[![Nuxt UI Pro](https://img.shields.io/badge/Made%20with-Nuxt%20UI%20Pro-00DC82?logo=nuxt.js&labelColor=020420)](https://ui.nuxt.com/pro)
-
-- [Live demo](https://nuxt-ui-pro-template-landing.vercel.app)
-- [Play on Stackblitz](https://stackblitz.com/github/nuxt-ui-pro/landing)
-- [Documentation](https://ui.nuxt.com/pro/guide)
-
-https://github.com/nuxt-ui-pro/landing/assets/904724/c7dd64a4-a09c-4cab-9572-92a02a5e06f9
-
-## Setup
+# Setup
 
 Make sure to install the dependencies:
 

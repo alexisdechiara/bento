@@ -1,85 +1,68 @@
-<script setup lang="ts">
-const links = [{
-  label: 'Resources',
-  children: [{
-    label: 'Help center'
-  }, {
-    label: 'Docs'
-  }, {
-    label: 'Roadmap'
-  }, {
-    label: 'Changelog'
-  }]
-}, {
-  label: 'Features',
-  children: [{
-    label: 'Affiliates'
-  }, {
-    label: 'Portal'
-  }, {
-    label: 'Jobs'
-  }, {
-    label: 'Sponsors'
-  }]
-}, {
-  label: 'Company',
-  children: [{
-    label: 'About'
-  }, {
-    label: 'Pricing'
-  }, {
-    label: 'Careers'
-  }, {
-    label: 'Blog'
-  }]
-}]
-
-const toast = useToast()
-
-const email = ref('')
-const loading = ref(false)
-
-function onSubmit () {
-  loading.value = true
-
-  setTimeout(() => {
-    toast.add({
-      title: 'Subscribed!',
-      description: 'You\'ve been subscribed to our newsletter.'
-    })
-
-    loading.value = false
-  }, 1000)
-}
-</script>
-
 <template>
-  <UFooter>
-    <template #top>
-      <UFooterColumns :links="links">
-        <template #right>
-          <form @submit.prevent="onSubmit">
-            <UFormGroup label="Subscribe to our newsletter" :ui="{ container: 'mt-3' }">
-              <UInput v-model="email" type="email" placeholder="Enter your email" :ui="{ icon: { trailing: { pointer: '' } } }" required size="xl" autocomplete="off" class="max-w-sm">
-                <template #trailing>
-                  <UButton type="submit" size="xs" :label="loading ? 'Subscribing' : 'Subscribe'" :loading="loading" />
-                </template>
-              </UInput>
-            </UFormGroup>
-          </form>
-        </template>
-      </UFooterColumns>
-    </template>
+  <footer :class="ui.wrapper" v-bind="attrs">
+    <div v-if="$slots.top" :class="ui.top.wrapper">
+      <UContainer :class="ui.top.container">
+        <slot name="top" />
+      </UContainer>
+    </div>
 
-    <template #left>
-      <p class="text-gray-500 dark:text-gray-400 text-sm">
-        Copyright © {{ new Date().getFullYear() }}. All rights reserved.
-      </p>
-    </template>
+    <div :class="ui.bottom.wrapper">
+      <UContainer :class="ui.bottom.container">
+        <div :class="ui.bottom.right">
+          <slot name="right" />
+        </div>
 
-    <template #right>
-      <UColorModeButton size="sm" />
-      <UButton to="https://github.com/alexisdechiara/bento" target="_blank" icon="i-simple-icons-github" aria-label="GitHub" color="gray" variant="ghost" />
-    </template>
-  </UFooter>
+        <div :class="ui.bottom.center">
+          <slot name="center">
+            <UIFooterLinks :links="links" />
+          </slot>
+        </div>
+
+        <div :class="ui.bottom.left">
+          <slot name="left" />
+        </div>
+      </UContainer>
+    </div>
+  </footer>
 </template>
+
+<script setup lang="ts">
+import type { PropType } from 'vue'
+import type { FooterLink } from './UI/FooterLinks.vue'
+
+const config = {
+  wrapper: 'relative',
+  top: {
+    wrapper: '',
+    container: 'py-8 lg:py-12'
+  },
+  bottom: {
+    wrapper: '',
+    container: 'py-8 lg:py-4 lg:flex lg:items-center lg:justify-between lg:gap-x-3',
+    left: 'flex items-center justify-center lg:justify-start lg:flex-1 gap-x-1.5 mt-3 lg:mt-0 lg:order-1',
+    center: 'mt-3 lg:mt-0 lg:order-2 flex items-center justify-center',
+    right: 'lg:flex-1 flex items-center justify-center lg:justify-end gap-x-1.5 lg:order-3'
+  }
+}
+
+defineOptions({
+  inheritAttrs: false
+})
+
+const props = defineProps({
+  links: {
+    type: Array as PropType<FooterLink[]>,
+    default: () => []
+  },
+  class: {
+    type: [String, Object, Array] as PropType<any>,
+    default: undefined
+  },
+  ui: {
+    type: Object as PropType<Partial<typeof config>>,
+    default: () => ({})
+  }
+})
+
+const { ui, attrs } = useUI('footer', toRef(props, 'ui'), config, toRef(props, 'class'), true)
+</script>

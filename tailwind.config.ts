@@ -6,6 +6,11 @@ export default <Partial<Config>>{
     extend: {
       fontFamily: {
         sans: ['DM Sans', 'DM Sans fallback', ...defaultTheme.fontFamily.sans]
+      },
+      aspectRatio: {
+        auto: 'auto',
+        square: '1 / 1',
+        video: '16 / 9'
       }
     },
     safelist: [
