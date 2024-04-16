@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import type { FooterLink } from './components/UI/FooterLinks.vue'
-import type { HeaderLink } from './components/UI/HeaderLinks.vue'
+const { data: footerPage } = await useAsyncData('footer', () => queryContent('/footer').findOne())
+const { data: headerPage } = await useAsyncData('header', () => queryContent('/header').findOne())
+
 
 useHead({
   meta: [
@@ -14,30 +15,6 @@ useHead({
   }
 })
 
-const headerLinks: HeaderLink[] = [{
-  label: 'Homepage',
-  to: '/',
-
-}, {
-  label: 'Playground',
-  to: '/playground',
-}]
-
-const footerLinks: FooterLink[] = [{
-  label: 'About',
-  to: '/about'
-},{
-  label: 'Legal notice',
-  to: 'legal-notice'
-}, {
-  label: 'Feature request',
-  to: ''
-}, {
-  label: 'Blog',
-  to: 'https://geekly.blog',
-  target: '_blank'
-}]
-
 useSeoMeta({
   ogSiteName: 'Nuxt UI Pro - Landing template',
   twitterCard: 'summary_large_image'
@@ -45,22 +22,24 @@ useSeoMeta({
 </script>
 
 <template>
-  <Header :links="headerLinks">
+  <Header :links="headerPage.links">
     <template #logo>
       Bento Studio <UBadge label="Alpha" variant="subtle" class="mb-0.5" />
     </template>
 
     <template #right>
-      <UButton label="Log in" color="white" variant="ghost" trailing-icon="i-heroicons-arrow-right-20-solid" class="hidden lg:flex" disabled :ui="{ rounded: 'rounded-full' }" />
+      <UIColorModeButton class="hidden lg:flex" />
+      <!-- <UButton label="Log in" color="white" variant="ghost" trailing-icon="i-heroicons-arrow-right-20-solid" class="hidden lg:flex" disabled :ui="{ rounded: 'rounded-full' }" /> -->
     </template>
 
     <template #panel>
-      <UIAsideLinks :links="headerLinks" />
+      <UIAsideLinks :links="headerPage.links" />
 
       <UDivider class="my-6" />
 
-      <UButton label="Sign in" color="white" block class="mb-3" disabled />
-      <UButton label="Get started" block disabled />
+      <UIColorModeSelect block size="md" class="mb-3" />
+      <!-- <UButton label="Sign in" color="white" block class="mb-3" disabled />
+      <UButton label="Get started" block disabled /> -->
     </template>
   </Header>
 
@@ -68,14 +47,14 @@ useSeoMeta({
     <NuxtPage />
   </Main>
 
-  <Footer :links="footerLinks">
+  <Footer :links="footerPage.links">
     <template #left>
       Copyright © {{ new Date().getFullYear() }}
+      <span v-if="footerPage.copyright.author">- {{ footerPage.copyright.author }} </span>
     </template>
 
     <template #right>
-      <UButton icon="i-simple-icons-bluesky" color="gray" variant="ghost" to="https://bsky.app/profile/alexisdechiara.fr" target="_blank" />
-      <UButton icon="i-simple-icons-github" color="gray" variant="ghost" to="https://github.com/alexisdechiara/bento" target="_blank" />
+      <UButton v-for="social in footerPage.socials" :key="social.label" :icon="social.icon" color="gray" variant="ghost" :to="social.to" :target="social.target" />
     </template>
   </Footer>
 </template>

@@ -1,0 +1,26 @@
+hero:
+  headline: About
+  title: Bento Studio
+  description: Bento Studio is a collection of premium items built on top of Nuxt UI to create beautiful & responsive bento grids with use of Tiptap, Unovis and more.
+  image: '/image/about.jfif'
+section:
+  title: Team
+  description: The team is composed by only one person.
+team:
+  - name: Alexis De Chiara
+    role: Creator, Developer, Designer and Maintainer
+    image: '/image/team/alexis.jpg'
+    description: French Front-End developer who likes to create open source projects to learn and improve his Nuxt and web design skills.
+    socials:
+      - name: Bluesky
+        icon: i-simple-icons-bluesky
+        to: https://bsky.app/profile/alexisdechiara.fr
+        target: '_blank'
+      - name: GitHub
+        icon: i-simple-icons-github
+        to: https://github.com/alexisdechiara
+        target: '_blank'
+      - name: LinkedIn
+        icon: i-simple-icons-linkedin
+        to: https://www.linkedin.com/in/alexisdechiara/
+        target: '_blank'

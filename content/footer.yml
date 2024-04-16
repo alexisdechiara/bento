@@ -1,0 +1,22 @@
+copyright:
+  author: Alexis De Chiara
+links:
+  - label: About
+    to: '/about'
+  - label: Legal notice
+    to: 'legal-notice'
+  - label: Feature request
+    to: '#'
+    target: '_blank'
+  - label: Blog
+    to: 'https://geekly.blog'
+    target: '_blank'
+socials:
+  - label: Bluesky
+    icon: i-simple-icons-bluesky
+    to: https://bsky.app/profile/alexisdechiara.fr
+    targer: '_blank'
+  - label: GitHub
+    icon: i-simple-icons-github
+    to: https://github.com/alexisdechiara/bento
+    target: '_blank'

@@ -8,7 +8,7 @@
 import type { PropType } from 'vue'
 
 const config = {
-  wrapper: 'min-h-[calc(100vh-var(--header-height))]'
+  wrapper: 'min-h-[calc(100vh-var(4rem))]'
 }
 
 defineOptions({

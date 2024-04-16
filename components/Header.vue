@@ -84,8 +84,8 @@ import { useId } from '#imports'
 import type { AsideLink } from './UI/AsideLinks.vue'
 
 const config = computed(() => ({
-  wrapper: 'bg-red/75 dark:bg-black/75 lg:!border-transparent backdrop-blur border-b border-gray-200 dark:border-gray-800 -mb-px sticky top-0 z-50 py-4',
-  container: 'flex items-center justify-between gap-3 h-[--header-height]',
+  wrapper: 'bg-red/75 dark:bg-black/75 lg:!border-transparent backdrop-blur border-b border-gray-200 dark:border-gray-800 -mb-px sticky top-0 z-50 py-2',
+  container: 'flex items-center justify-between gap-3 h-[4rem]',
   left: 'lg:flex-1 flex items-center gap-1.5',
   center: 'hidden lg:flex',
   right: 'flex items-center justify-end lg:flex-1 gap-1.5',
@@ -103,7 +103,7 @@ const config = computed(() => ({
     }
   },
   links: {
-    wrapper: 'ring-1 ring-gray-200 dark:ring-gray-800 px-3 gap-x-0 rounded-full border',
+    wrapper: 'ring-1 ring-gray-200 dark:ring-gray-800 px-3 gap-x-0 rounded-full border bg-white dark:bg-gray-950',
     base: 'py-2 px-4 font-medium transition-colors relative after:absolute after:-bottom-px after:inset-x-2 after:h-px after:rounded-full after:opacity-0 after:bg-gray-900 dark:after:bg-white after:transition-opacity',
     active: 'text-gray-900 dark:text-white after:opacity-100',
     inactive: 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
