@@ -2,6 +2,7 @@
 export default defineNuxtConfig({
   ssr: false,
   modules: [
+    '@nuxthq/studio',
     '@nuxt/content',
     '@nuxt/ui',
     '@nuxt/image',
