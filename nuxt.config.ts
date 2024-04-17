@@ -6,14 +6,11 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@nuxtjs/fontaine',
     '@nuxtjs/google-fonts',
-    'nuxt-og-image',
+    // 'nuxt-og-image',
     '@pinia/nuxt',
     'nuxt-tiptap-editor',
     '@samk-dev/nuxt-vcalendar'
   ],
-  ui: {
-    icons: ['heroicons', 'simple-icons']
-  },
   // Fonts
   fontMetrics: {
     fonts: ['DM Sans']
@@ -30,5 +27,5 @@ export default defineNuxtConfig({
   },
   // Devtools / Typescript
   devtools: { enabled: true },
-  typescript: { strict: false }
+  typescript: { strict: false },
 })
