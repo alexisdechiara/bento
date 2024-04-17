@@ -1,5 +1,11 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  ssr: false,
+  routeRules: {
+    '/': {isr: true},
+    '/about': { isr: true },
+    '/legal-notice': { isr: true }
+  },
   modules: [
     '@nuxt/content',
     '@nuxt/ui',
