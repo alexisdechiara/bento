@@ -8,7 +8,7 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@nuxtjs/fontaine',
     '@nuxtjs/google-fonts',
-    // 'nuxt-og-image',
+    'nuxt-og-image',
     '@pinia/nuxt',
     'nuxt-tiptap-editor',
     '@samk-dev/nuxt-vcalendar'
@@ -30,4 +30,15 @@ export default defineNuxtConfig({
   // Devtools / Typescript
   devtools: { enabled: true },
   typescript: { strict: false },
+
+  // OG image
+  site: {
+    url: [
+      // vercel, netlify
+      process.env.NUXT_ENV_VERCEL_URL,
+      process.env.SITE_URL
+    ],
+    // vercel, netlify
+    name: [process.env.NUXT_ENV_VERCEL_GIT_REPO_SLUG]
+  },
 })

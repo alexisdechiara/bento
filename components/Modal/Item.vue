@@ -85,6 +85,7 @@
 const slots = useSlots()
 const gridStore = useGridStore()
 const { settings } = storeToRefs(gridStore)
+const toast = useToast()
 
 const emit = defineEmits(['return', 'close'])
 
@@ -147,7 +148,6 @@ const updateHeight = ((oldValue: number, event: any) => {
 })
 
 const onSubmit = (() => {
-  console.log(props.values)
   const gridStore = useGridStore()
   const item: Item = {
     label: label.value,
@@ -159,8 +159,15 @@ const onSubmit = (() => {
     preserveAspectRatio: preserveAspectRatio.value
   }
   if (props.isSubmitable) {
+    try {
     gridStore.addItem(item)
+    toast.add({ icon: 'i-heroicons-check-circle', title: 'The item has been added', color: 'green' })
     emit('close')
+    } catch (error) {
+      toast.add({ icon: 'i-heroicons-check-circle', title: 'An error has occurred', description: error, color: 'red' })
+    }
+  } else {
+    toast.add({ icon: 'i-heroicons-check-circle', title: 'The item is not valid', description: 'Please fill in all the required fields', color: 'red' })
   }
 })
 </script>

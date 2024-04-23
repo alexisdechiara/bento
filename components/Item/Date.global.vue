@@ -14,7 +14,6 @@ defineProps<{
   }
 }>()
 
-defineEmits(['remove', 'edit'])
 </script>
 
 <template>
@@ -73,8 +72,6 @@ defineEmits(['remove', 'edit'])
         </div>
       </div>
     </template>
-    <UButton icon="i-heroicons-pencil" size="2xs" color="primary" variant="soft" class="absolute invisible group-hover:visible bottom-4 right-12 z-10" @click="$emit('edit')" />
-    <UButton icon="i-heroicons-trash" size="2xs" color="red" variant="soft" class="absolute invisible group-hover:visible bottom-4 right-4 z-10" @click="$emit('remove')" />
   </div>
 </template>
 

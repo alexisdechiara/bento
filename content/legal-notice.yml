@@ -5,14 +5,22 @@ hero:
   informations:
     - name: Website creator
       icon: i-heroicons-user-solid
-      description: "The website was created by Alexis De Chiara :"
+      description: "The website is edited and published by Alexis De Chiara."
       lines:
         - 50 BD STALINGRAD,
         - 06300,
         - NICE
+        - "SIRET number: 97827363900010"
+        - Assigned to the RCS of Nice
+        - "E-mail: pro@alexisdechiara.fr"
     - name: Site host
       icon: i-heroicons-server-solid
-      description: The website is hosted on …
+      description: "The website is hosted on Vercel :"
+      lines:
+        - Vercel Inc.
+        - "340 S Lemon Ave #4133 Walnut, CA 91789"
+        - "Phone : (559) 288-7060."
+        - "E-mail : privacy@vercel.com"
     - name: License
       icon: i-ph-copyleft-bold
       description: The website is licensed under the GPLv3 license whose full text can be found in the LICENSE file in the GitHub repository.
