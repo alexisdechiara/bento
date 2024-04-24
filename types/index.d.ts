@@ -30,33 +30,43 @@ declare global {
     series: Array<number>
   }
 
+  type annotationChart = {
+    title?: string
+    titleSize?: number
+    description?: string
+  }
+
+  type chartAxis = {
+    x?: {
+      show?: boolean
+      label?: string
+      labelSize?: number
+      options?: string[]
+    }
+    y?: {
+      show?: boolean
+      label?: string
+      labelSize?: number
+      options?: string[]
+    }
+  }
+
+  type lineChart = {
+    type?: string
+    color?: string
+    width?: number
+    dashes?: number[]
+  }
+
   interface LineChartItem {
     options: {
-      axis: {
-        x: {
-          show: boolean
-          label: string
-          labelSize: number
-          options: string[]
-        }
-        y: {
-          show: boolean
-          label: string
-          labelSize: number
-          options: string[]
-        }
-      }
+      axis: chartAxis
       annotations: AnnotationItem[]
       crosshair: {
         show: boolean
         value: (d: DataRecord) => string
       }
-      line: {
-        type: string
-        color: string
-        width: number
-        dashes: number[]
-      }
+      line: lineChart
     },
     data: DataRecord[]
   }

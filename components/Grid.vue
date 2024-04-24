@@ -4,8 +4,8 @@
       <GridLayout v-if="Array.isArray(items) && items.length" v-model:layout="items" class="lg:w-[960px] xl:w-[1200px]" :prevent-collision="settings.preventCollision" :row-height="gridStore.getRowHeightForSquare" :col-num="settings.colNum" :is-resizable="true" :is-draggable="true" :auto-size="true" :show-grid-lines="settings.showGrid" :vertical-compact="!settings.freeGrid">
         <template v-for="item in items" :key="item.i">
           <GridItem :show-close-button="false" :is-resizable="true" :enable-edit-mode="true" :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="item.i" :use-border-radius="settings.roundedItems" :border-radius="Number(settings.borderRadius.replace(/\D/g, ''))" class="relative" :class="[settings.themes[item.customTheme ? item.customTheme : settings.currentTheme]]" :preserveAspectRatio="item.preserveAspectRatio">
-            <div class="relative w-full h-full group">
-              <div class="flex gap-x-1 absolute rounded-lg bg-black invisible group-hover:visible -bottom-4 right-1/2 translate-x-1/2 z-50 py-1 px-2">
+            <div class="w-full h-full group overflow-hidden vue-use-radius">
+              <div class="flex gap-x-1 absolute rounded-lg bg-black transition duration-300 opacity-0 group-hover:opacity-100 -bottom-4 right-1/2 translate-x-1/2 z-50 py-1 px-2">
                 <UButton icon="i-heroicons-pencil-square-20-solid" size="2xs" :ui="{ color: { black: {solid: 'hover:bg-gray-700'}}}" />
                 <UButton icon="i-heroicons-document-duplicate-20-solid" size="2xs" :ui="{ color: { black: {solid: 'hover:bg-gray-700'}}}" />
                 <UButton icon="i-heroicons-trash-20-solid" size="2xs" :ui="{ color: { black: {solid: 'hover:bg-gray-700'}}}" @click="deleteItem(item)" />
@@ -62,25 +62,14 @@ const options = (item: any) => [
 </script>
 
 <style lang="scss" scoped>
-.vue-close-button {}
-
-.vue-close-button:hover {}
 
 .vue-grid-item {
   transition: all 200ms ease;
   transition-property: left, top, right;
+  position: relative;
 
   &.no-touch {
     touch-action: none;
-  }
-
-  &.vue-use-radius {
-    border-radius: v-bind('settings.borderRadius') !important;
-    overflow: visible;
-
-    &~.vue-grid-placeholder {
-      border-radius: v-bind('settings.borderRadius') !important;
-    }
   }
 
   &.css-transforms {
@@ -107,6 +96,14 @@ const options = (item: any) => [
 
   &.vue-grid-placeholder {
     @apply bg-primary;
+  }
+}
+
+.vue-use-radius {
+  border-radius: v-bind('settings.borderRadius') !important;
+
+  &~.vue-grid-placeholder {
+    border-radius: v-bind('settings.borderRadius') !important;
   }
 }
 
