@@ -58,6 +58,15 @@ declare global {
     dashes?: number[]
   }
 
+  type barChart = {
+    orientation?: string
+    roundedCorners?: boolean | number
+    groupWidth?: number
+    groupPadding?: number
+    barPadding?: number
+    minimumBarHeight?: number
+  }
+
   interface LineChartItem {
     options: {
       axis: chartAxis

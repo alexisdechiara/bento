@@ -1,13 +1,13 @@
 <template>
   <ModalItem :values="values" label="Line Chart" :component-id="7" :preserve-aspect-ratio="false" :is-submitable="data.length > 0" @return="$emit('return')" @close="$emit('close')">
     <template #preview>
-      <ItemLineChart :values="values" />
+      <!-- <ItemLineChart :values="values" /> -->
     </template>
     <template #content>
       <div class="grid grid-cols-2 size-full overflow-hidden">
         <ClientOnly>
           <VisXYContainer :key="componentKey" :data="data" :margin="{ left: 0, top: 4, right: 16, bottom: 4 }" class="relative">
-            <VisLine :curve-type="line.type" :line-width="line.width" :color="line.color" :line-dash-array="line.dashes" :x="x" :y="y" />
+            <VisGroupedBar :orientation="bar.orientation" :rounded-corners="bar.roundedCorners" :x="x" :y="y" />
             <VisAnnotations :items="annotationList" />
             <VisTooltip />
             <VisAxis v-if="axis.x.show" :label-font-size="axis.x.labelSize" :tick-text-font-size="!axis.x.options.includes('Tick label') ? 0 : 12" :grid-line="axis.x.options.includes('Grid line')" :tick-line="axis.x.options.includes('Tick line')" :domain-line="axis.x.options.includes('Domain line')" type="x" :label="axis.x.label" />
@@ -16,12 +16,24 @@
           </VisXYContainer>
         </ClientOnly>
         <div class="max-h-full h-fit overflow-auto rounded-t my-1.5">
-          <UTable :empty-state="{ icon: 'i-heroicons-circle-stack-20-solid', label: 'No data' }" :rows="data" :columns="colums" :ui="{ thead: 'bg-gray-50 dark:bg-gray-700', td: { padding: 'p-0' } }">
-            <template #valueX-data="{ row }">
-              <UInput v-model.lazy="row.x" type="number" variant="none" class="p-1 w-full" />
+          <UTable :key="componentKey" :sort-button="{ icon: 'i-heroicons-arrows-up-down-20-solid', color: 'gray', variant: 'soft', square: true, class:'text-black font-semibold' }" sort-asc-icon="i-heroicons-bars-arrow-down-20-solid" sort-desc-icon="i-heroicons-bars-arrow-up-20-solid" :empty-state="{ icon: 'i-heroicons-circle-stack-20-solid', label: 'No data' }" :rows="data" :columns="columns" :ui="{ thead: 'bg-gray-50 dark:bg-gray-700', th: { base: 'text-nowrap min-w-fit' }, td: { padding: 'p-0' } }">
+            <template v-for="key in columns.map((c) => c.key).filter((k) => k.startsWith('y'))" :key="key" #[`${key}-header`]="{ column }">
+              <UDropdown :items="headerActions(column)" :popper="{ placement: 'bottom' }">
+                <UButton color="gray" variant="soft" class="group text-black font-semibold">
+                  <template #trailing>
+                    <UIcon name="i-heroicons-ellipsis-horizontal-20-solid" class="invisible group-hover:visible" />
+                  </template>
+                  {{ column.label }}
+                </UButton>
+              </UDropdown>
             </template>
-            <template #valueY-data="{ row }">
-              <UInput v-model.lazy="row.y" type="number" variant="none" class="p-1 w-full border-x" />
+            <template #x-data="{ row }">
+              <div class="bg-gray-50 dark:bg-gray-700">
+                <UInput v-model.lazy="row.x" type="number" variant="none" color="gray" class="p-1 w-full border-r font-semibold text-black" />
+              </div>
+            </template>
+            <template v-for="key in columns.map((c) => c.key).filter((k) => k.startsWith('y'))" :key="key" #[`${key}-data`]="{ row }">
+              <UInput v-model.lazy="row[key]" type="number" variant="none" class="p-1 w-full border-r" />
             </template>
             <template #actions-data="{ row, index }">
               <UDropdown :items="tableActions(row, index)">
@@ -36,16 +48,15 @@
       <div class="grid grid-cols-2 size-full overflow-hidden">
         <ClientOnly>
           <VisXYContainer :key="componentKey" :data="data" :margin="{ left: 0, top: 4, right: 16, bottom: 4 }" class="relative">
-            <VisLine :curve-type="line.type" :line-width="line.width" :color="line.color" :line-dash-array="line.dashes" :x="x" :y="y" />
+            <VisGroupedBar :orientation="bar.orientation" :rounded-corners="bar.roundedCorners" :x="x" :y="y" />
             <VisAnnotations :items="annotationList" />
-            <VisTooltip />
+            <VisTooltip :triggers="{[GroupedBar.selectors.bar]: triggers}" />
             <VisAxis v-if="axis.x.show" :label-font-size="axis.x.labelSize" :tick-text-font-size="!axis.x.options.includes('Tick label') ? 0 : 12" :grid-line="axis.x.options.includes('Grid line')" :tick-line="axis.x.options.includes('Tick line')" :domain-line="axis.x.options.includes('Domain line')" type="x" :label="axis.x.label" />
             <VisAxis v-if="axis.y.show" :label-font-size="axis.y.labelSize" :tick-text-font-size="!axis.y.options.includes('Tick label') ? 0 : 12" :grid-line="axis.y.options.includes('Grid line')" :tick-line="axis.y.options.includes('Tick line')" :domain-line="axis.y.options.includes('Domain line')" type="y" :label="axis.y.label" />
-            <VisCrosshair v-if="showCrosshair" :template="triggers" />
           </VisXYContainer>
         </ClientOnly>
         <div class="flex flex-col max-h-full gap-y-4 py-1.5 pr-0.5 overflow-auto">
-          <ChartOptions v-model:annotation="annotation" v-model:line="line" v-model:axis="axis" v-model:show-crosshair="showCrosshair" :line-types="types" :label-options="labelOptions" />
+          <ChartOptions v-model:annotation="annotation" v-model:axis="axis" v-model:show-crosshair="showCrosshair" v-model:bar="bar" :label-options="labelOptions" />
         </div>
       </div>
     </template>
@@ -53,21 +64,22 @@
 </template>
 
 <script lang="ts" setup>
-import { VisXYContainer, VisLine, VisAxis, VisTooltip, VisCrosshair } from '@unovis/vue'
-import type { AnnotationItem } from '@unovis/ts'
-const { types, labelOptions } = useLineChart()
+import { VisXYContainer, VisGroupedBar, VisAxis, VisTooltip } from '@unovis/vue'
+import { GroupedBar, type AnnotationItem } from '@unovis/ts'
+const { labelOptions } = useLineChart()
 
 const triggers = computed(() => {
-  return (d: DataRecord) => `<span>x :  ${d.x}<br/>y :  ${d.y}</span>`
+  return (d: DataRecord) => `<div>${d.x}<br/>` + columns.value.map((c) => c.key).filter((k) => k.startsWith('y')).map((k) => `${columns.value.find((c) => c.key === k)?.label} :  ${d[k]}`).join('<br/>') + '</div>'
 })
 
-const colums = computed(() => [
+const columns = computed(() => [
   {
-    key: 'valueX',
-    label: axis.value.x.label
+    key: 'x',
+    label: axis.value.x.label,
+    sortable: true,
   },
   {
-    key: 'valueY',
+    key: 'y1',
     label: axis.value.y.label
   },
   {
@@ -75,28 +87,115 @@ const colums = computed(() => [
   }
 ])
 
-const data = reactive<DataRecord[]>([
+let nbY = 1
+
+const data = reactive<Object[]>([
   {
     x: 0,
-    y: 0,
+    y1: 0,
   },
   {
     x: 1,
-    y: 2,
+    y1: 2,
   },
   {
     x: 2,
-    y: 1,
+    y1: 1,
   },
   {
     x: 3,
-    y: 5,
+    y1: 5,
   },
   {
     x: 4,
-    y: 4,
+    y1: 4,
   }
 ])
+
+const headerActions = (column: any) => {
+  const index = columns.value.findIndex((c) => c.key === column.key)
+  return [
+    [
+      {
+        label: 'Rename',
+        icon: 'i-fluent-rename-20-filled',
+        click: () => columns.value.find((c) => c.key === column.key).label = prompt('Enter new label', columns.value.find((c) => c.key === column.key).label)
+      }
+    ],
+    [
+      {
+        label: 'Duplicate',
+        icon: 'i-heroicons-document-duplicate-20-solid',
+        click: () => addYColumn(index + 1, column)
+      },
+      {
+        label: 'Move left',
+        icon: 'i-heroicons-arrow-left-circle-20-solid',
+        disabled: index < 2,
+        click: () => moveYColumn(index, index - 1)
+      },
+      {
+        label: 'Move right',
+        icon: 'i-heroicons-arrow-right-circle-20-solid',
+        disabled: index === columns.value.length - 2,
+        click: () => moveYColumn(index, index + 1)
+      }
+    ],
+    [
+      {
+        label: 'Add',
+        icon: 'i-heroicons-plus-circle-20-solid',
+        click: () =>  addYColumn(columns.value.length - 1)
+      },
+      {
+        label: 'Delete',
+        icon: 'i-heroicons-trash-20-solid',
+        click: () => {
+          removeYColumn(index)
+        }
+      }
+    ]
+  ]
+}
+
+function incrementNbY() {
+  nbY = nbY + 1
+}
+
+const moveYColumn = (from: number, to: number) => {
+  columns.value.splice(to, 0, columns.value.splice(from, 1)[0])
+  data.forEach((d) => {
+    const [fromKey, toKey] = [columns.value[from].key, columns.value[to].key]
+    const [fromValue, toValue] = [d[fromKey], d[toKey]]
+    d[fromKey] = toValue
+    d[toKey] = fromValue
+  })
+  forceRerender()
+}
+
+const addYColumn = (index: number, column?: any) => {
+  incrementNbY()
+  const key = 'y' + nbY
+  columns.value.splice(index, 0, {
+    key: key,
+    label: column ? 'Copy of ' + column.label.charAt(0).toLowerCase() + column.label.slice(1) : 'Ordonates (Y' + nbY + ')'
+  })
+  data.forEach((d) => {
+    d['y' + nbY] = column ? d[column.key] : null
+  })
+  y.value.splice(index, 0, (d) => d[key])
+  forceRerender()
+}
+
+const removeYColumn = (index: number) => {
+  const key = columns.value[index].key
+  columns.value.splice(index, 1)
+  data.forEach((d) => {
+    delete d[key]
+  })
+  y.value.splice(index - 1, 1)
+  forceRerender()
+}
 
 const tableActions = (row: any, index: number) => [
   [{
@@ -141,9 +240,10 @@ const tableActions = (row: any, index: number) => [
   }]
 ]
 
+
 const componentKey = ref(0)
 const x = computed(() => (d: DataRecord) => d.x)
-const y = computed(() => (d: DataRecord) => d.y)
+const y = computed(() =>[(d: any) => d.y1])
 
 const annotation = ref<annotationChart>({
   title: 'Title',
@@ -164,11 +264,9 @@ const axis = ref<chartAxis>({
     options: [labelOptions[0], labelOptions[1], labelOptions[2], labelOptions[3]]
   }
 })
-const line = ref<lineChart>({
-  type: types[0].value,
-  color: '#3b82f6',
-  width: 2,
-  dashes: [0]
+const bar = ref<barChart>({
+  orientation: 'vertical',
+  roundedCorners: 0,
 })
 
 const showCrosshair = ref<boolean>(true)
@@ -188,7 +286,7 @@ const forceRerender = () => {
 
 defineEmits(['return', 'close'])
 
-const values = computed<LineChartItem>(() => ({
+const values = computed(() => ({
   options: {
     axis: axis.value,
     annotations: annotationList.value,
@@ -196,7 +294,6 @@ const values = computed<LineChartItem>(() => ({
       show: showCrosshair.value,
       value: triggers.value
     },
-    line: line.value
   },
   data : data,
 }))

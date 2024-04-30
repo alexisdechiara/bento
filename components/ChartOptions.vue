@@ -53,7 +53,7 @@
         </div>
       </UFormGroup>
     </template>
-    <template #options>
+    <template #line>
       <div class="grid grid-cols-3 gap-4">
         <UFormGroup label="Curve type">
           <USelectMenu v-model="line.type" :options="lineTypes" option-attribute="label" value-attribute="value" />
@@ -78,10 +78,21 @@
         </div>
       </UFormGroup>
     </template>
+    <template #bar>
+      <UFormGroup label="Orientation">
+        <USelectMenu v-model="bar.orientation" :options="barOrientations" @change="invertLabelAxis()"/>
+      </UFormGroup>
+      <UFormGroup label="Rounded">
+        <UTooltip :text="bar.roundedCorners" class="w-full">
+          <URange v-model="bar.roundedCorners" :min="0" :max="32" :step="1" />
+        </UTooltip>
+      </UFormGroup>
+    </template>
   </UAccordion>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
+import { useCloned } from '@vueuse/core'
 
 const accordionSettings = [
   {
@@ -105,10 +116,17 @@ const accordionSettings = [
     defaultOpen: false,
     disabled: false
   },
+  // {
+  //   label: 'Line',
+  //   slot: 'line',
+  //   icon: 'i-solar-graph-linear',
+  //   defaultOpen: false,
+  //   disabled: false
+  // },
   {
-    label: 'Line',
-    slot: 'options',
-    icon: 'i-solar-graph-linear',
+    label: 'Bar',
+    slot: 'bar',
+    icon: 'i-solar-chart-square-linear',
     defaultOpen: false,
     disabled: false
   },
@@ -137,19 +155,27 @@ const colorList = [
   },
 ]
 
-export default {}
-</script>
-
-<script lang="ts" setup>
+const barOrientations = [
+  'vertical',
+  'horizontal',
+]
 
 const props = defineProps<{
-  lineTypes: Array<{label: string, value: string, icon: string}>
-  labelOptions: Array<string>
+  lineTypes?: Array<{label: string, value: string, icon: string}>
+  labelOptions?: Array<string>
+  groupedBar?: boolean
 }>()
 
 const annotation = defineModel<annotationChart>('annotation')
 const line = defineModel<lineChart>('line')
+const bar = defineModel<barChart>('bar')
 const axis = defineModel<chartAxis>('axis')
 const showCrosshair = defineModel<boolean>('showCrosshair')
+
+const invertLabelAxis = () => {
+  const { cloned } = useCloned(axis.value)
+  axis.value.x = axis.value.y
+  axis.value.y = cloned.value.x
+}
 
 </script>
