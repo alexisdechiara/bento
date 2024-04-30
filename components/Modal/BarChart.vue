@@ -1,13 +1,13 @@
 <template>
-  <ModalItem :values="values" label="Line Chart" :component-id="7" :preserve-aspect-ratio="false" :is-submitable="data.length > 0" @return="$emit('return')" @close="$emit('close')">
+  <ModalItem :values="values" label="Line Chart" :component-id="8" :width="2" :height="2" :preserve-aspect-ratio="false" :is-submitable="data.length > 0" @return="$emit('return')" @close="$emit('close')">
     <template #preview>
-      <!-- <ItemLineChart :values="values" /> -->
+      <ItemBarChart :values="values" />
     </template>
     <template #content>
       <div class="grid grid-cols-2 size-full overflow-hidden">
         <ClientOnly>
           <VisXYContainer :key="componentKey" :data="data" :margin="{ left: 0, top: 4, right: 16, bottom: 4 }" class="relative">
-            <VisGroupedBar :orientation="bar.orientation" :rounded-corners="bar.roundedCorners" :x="x" :y="y" />
+            <VisGroupedBar :orientation="bar.orientation" :rounded-corners="bar.roundedCorners" :color="color" :bar-padding="bar.barPadding" :group-padding="bar.groupPadding" :x="x" :y="y" />
             <VisAnnotations :items="annotationList" />
             <VisTooltip />
             <VisAxis v-if="axis.x.show" :label-font-size="axis.x.labelSize" :tick-text-font-size="!axis.x.options.includes('Tick label') ? 0 : 12" :grid-line="axis.x.options.includes('Grid line')" :tick-line="axis.x.options.includes('Tick line')" :domain-line="axis.x.options.includes('Domain line')" type="x" :label="axis.x.label" />
@@ -15,11 +15,14 @@
             <VisCrosshair v-if="showCrosshair" :template="triggers" />
           </VisXYContainer>
         </ClientOnly>
-        <div class="max-h-full h-fit overflow-auto rounded-t my-1.5">
-          <UTable :key="componentKey" :sort-button="{ icon: 'i-heroicons-arrows-up-down-20-solid', color: 'gray', variant: 'soft', square: true, class:'text-black font-semibold' }" sort-asc-icon="i-heroicons-bars-arrow-down-20-solid" sort-desc-icon="i-heroicons-bars-arrow-up-20-solid" :empty-state="{ icon: 'i-heroicons-circle-stack-20-solid', label: 'No data' }" :rows="data" :columns="columns" :ui="{ thead: 'bg-gray-50 dark:bg-gray-700', th: { base: 'text-nowrap min-w-fit' }, td: { padding: 'p-0' } }">
+        <div class="max-h-full h-fit max-w-full overflow-scroll rounded-t my-1.5 UTable">
+          <UTable :key="componentKey" :sort-button="{ icon: 'i-heroicons-arrows-up-down-20-solid', color: 'gray', variant: 'soft', square: true, class:'text-black font-semibold' }" sort-asc-icon="i-heroicons-bars-arrow-down-20-solid" sort-desc-icon="i-heroicons-bars-arrow-up-20-solid" :empty-state="{ icon: 'i-heroicons-circle-stack-20-solid', label: 'No data' }" :rows="data" :columns="columns" :ui="{ wrapper:'overflow-visible', base:'table-auto', thead: 'bg-gray-50 dark:bg-gray-700', th: { base: 'text-nowrap' }, td: { padding: 'p-0' } }">
             <template v-for="key in columns.map((c) => c.key).filter((k) => k.startsWith('y'))" :key="key" #[`${key}-header`]="{ column }">
               <UDropdown :items="headerActions(column)" :popper="{ placement: 'bottom' }">
                 <UButton color="gray" variant="soft" class="group text-black font-semibold">
+                  <template #leading>
+                    <span class="rounded-full size-4" :style="{ backgroundColor: colors[columns.findIndex((c) => c.key === column.key)-1] }" />
+                  </template>
                   <template #trailing>
                     <UIcon name="i-heroicons-ellipsis-horizontal-20-solid" class="invisible group-hover:visible" />
                   </template>
@@ -48,7 +51,7 @@
       <div class="grid grid-cols-2 size-full overflow-hidden">
         <ClientOnly>
           <VisXYContainer :key="componentKey" :data="data" :margin="{ left: 0, top: 4, right: 16, bottom: 4 }" class="relative">
-            <VisGroupedBar :orientation="bar.orientation" :rounded-corners="bar.roundedCorners" :x="x" :y="y" />
+            <VisGroupedBar :orientation="bar.orientation" :rounded-corners="bar.roundedCorners" :color="color" :bar-padding="bar.barPadding" :group-padding="bar.groupPadding" :x="x" :y="y" />
             <VisAnnotations :items="annotationList" />
             <VisTooltip :triggers="{[GroupedBar.selectors.bar]: triggers}" />
             <VisAxis v-if="axis.x.show" :label-font-size="axis.x.labelSize" :tick-text-font-size="!axis.x.options.includes('Tick label') ? 0 : 12" :grid-line="axis.x.options.includes('Grid line')" :tick-line="axis.x.options.includes('Tick line')" :domain-line="axis.x.options.includes('Domain line')" type="x" :label="axis.x.label" />
@@ -56,7 +59,7 @@
           </VisXYContainer>
         </ClientOnly>
         <div class="flex flex-col max-h-full gap-y-4 py-1.5 pr-0.5 overflow-auto">
-          <ChartOptions v-model:annotation="annotation" v-model:axis="axis" v-model:show-crosshair="showCrosshair" v-model:bar="bar" :label-options="labelOptions" />
+          <ChartOptions v-model:colors="colors" v-model:annotation="annotation" v-model:axis="axis" v-model:show-crosshair="showCrosshair" v-model:bar="bar" :label-options="labelOptions" :columns="columns.filter((c: any) => c.key.startsWith('y'))" />
         </div>
       </div>
     </template>
@@ -89,7 +92,7 @@ const columns = computed(() => [
 
 let nbY = 1
 
-const data = reactive<Object[]>([
+const data = reactive<DataRecord[]>([
   {
     x: 0,
     y1: 0,
@@ -170,6 +173,7 @@ const moveYColumn = (from: number, to: number) => {
     d[fromKey] = toValue
     d[toKey] = fromValue
   })
+  colors.value.splice(to - 1, 0, colors.value.splice(from -1, 1)[0])
   forceRerender()
 }
 
@@ -243,7 +247,7 @@ const tableActions = (row: any, index: number) => [
 
 const componentKey = ref(0)
 const x = computed(() => (d: DataRecord) => d.x)
-const y = computed(() =>[(d: any) => d.y1])
+const y = computed(() =>[(d: DataRecord) => d.y1])
 
 const annotation = ref<annotationChart>({
   title: 'Title',
@@ -266,8 +270,14 @@ const axis = ref<chartAxis>({
 })
 const bar = ref<barChart>({
   orientation: 'vertical',
+  barPadding: 0,
+  groupPadding: 0.5,
   roundedCorners: 0,
 })
+
+const colors = ref<string[]>(['#3b82f6','#ef4444','#f59e0b', '#10b981', '#8b5cf6'])
+
+const color = computed(() => (d: DataRecord, i: number) => colors.value[i])
 
 const showCrosshair = ref<boolean>(true)
 
@@ -276,9 +286,7 @@ const annotationList = computed<AnnotationItem[]>(() => [
   { x: 1, y: 5, width: 200, content: annotation.value.description }
 ])
 
-watch(() => [axis.value.x.show, axis.value.y.show, showCrosshair.value], () => {
-  forceRerender()
-})
+watch(() => [axis.value.x.show, axis.value.y.show, showCrosshair.value, colors.value], () => forceRerender(), {deep: true})
 
 const forceRerender = () => {
   componentKey.value ++
@@ -286,7 +294,7 @@ const forceRerender = () => {
 
 defineEmits(['return', 'close'])
 
-const values = computed(() => ({
+const values: BarChartItem = {
   options: {
     axis: axis.value,
     annotations: annotationList.value,
@@ -294,7 +302,11 @@ const values = computed(() => ({
       show: showCrosshair.value,
       value: triggers.value
     },
+    color: color.value,
+    bar: bar.value,
   },
   data : data,
-}))
+  x: x.value,
+  y: y.value
+}
 </script>

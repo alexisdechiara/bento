@@ -1,5 +1,5 @@
 <template>
-  <UAccordion :items="accordionSettings" :ui="{ wrapper: 'flex flex-col w-full', item: { base : 'flex flex-col gap-2 px-1 my-2'} }" multiple>
+  <UAccordion :items="accordionSettings" :ui="{ wrapper: 'flex flex-col w-full', item: { base : 'flex flex-col gap-2 px-1 my-2'} }">
     <template #default="{ item, open }">
       <UButton color="gray" :label="item.label" :icon="item.icon" variant="ghost" size="xl" class="border-b border-gray-200 dark:border-gray-700" :ui="{ rounded: 'rounded-none', padding: { sm: 'p-3' } }">
         <template #trailing>
@@ -80,12 +80,32 @@
     </template>
     <template #bar>
       <UFormGroup label="Orientation">
-        <USelectMenu v-model="bar.orientation" :options="barOrientations" @change="invertLabelAxis()"/>
+        <USelectMenu v-model="bar.orientation" :options="barOrientations" @change="invertLabelAxis()" />
       </UFormGroup>
-      <UFormGroup label="Rounded">
-        <UTooltip :text="bar.roundedCorners" class="w-full">
-          <URange v-model="bar.roundedCorners" :min="0" :max="32" :step="1" />
-        </UTooltip>
+      <div class="grid grid-cols-3 gap-x-4">
+        <UFormGroup label="Border radius">
+          <UTooltip :text="bar.roundedCorners" class="w-full" :popper="{ placement: 'right' }">
+            <URange v-model="bar.roundedCorners" :min="0" :max="16" :step="1" />
+          </UTooltip>
+        </UFormGroup>
+        <UFormGroup label="Bar padding">
+          <UTooltip :text="bar.barPadding" class="w-full" :popper="{ placement: 'right' }">
+            <URange v-model="bar.barPadding" :min="0" :max="1" :step=".1" />
+          </UTooltip>
+        </UFormGroup>
+        <UFormGroup label="Group padding">
+          <UTooltip :text="bar.groupPadding" class="w-full" :popper="{ placement: 'left' }">
+            <URange v-model="bar.groupPadding" :min="0" :max="1" :step=".1" />
+          </UTooltip>
+        </UFormGroup>
+      </div>
+      <UFormGroup label="Bar colors">
+        <div class="flex flex-col gap-y-2">
+          <div v-for="(data, index) in columns" :key="data.key" class="flex border-2 p-2 rounded-lg items-center justify-between">
+            <span class="text-gray-700 dark:text-gray-400 font-medium">{{ data.label }}</span>
+            <UIRadioColorGroup v-model="colors[index]" :name="data.key" :color-list="colorList" />
+          </div>
+        </div>
       </UFormGroup>
     </template>
   </UAccordion>
@@ -115,21 +135,7 @@ const accordionSettings = [
     icon: 'i-ph-crosshair',
     defaultOpen: false,
     disabled: false
-  },
-  // {
-  //   label: 'Line',
-  //   slot: 'line',
-  //   icon: 'i-solar-graph-linear',
-  //   defaultOpen: false,
-  //   disabled: false
-  // },
-  {
-    label: 'Bar',
-    slot: 'bar',
-    icon: 'i-solar-chart-square-linear',
-    defaultOpen: false,
-    disabled: false
-  },
+  }
 ]
 
 const colorList = [
@@ -153,6 +159,10 @@ const colorList = [
     name: 'violet',
     hex: '#8b5cf6',
   },
+  {
+    name: 'pink',
+    hex: '#ec4899',
+  }
 ]
 
 const barOrientations = [
@@ -164,6 +174,7 @@ const props = defineProps<{
   lineTypes?: Array<{label: string, value: string, icon: string}>
   labelOptions?: Array<string>
   groupedBar?: boolean
+  columns?: Array<any>
 }>()
 
 const annotation = defineModel<annotationChart>('annotation')
@@ -171,6 +182,27 @@ const line = defineModel<lineChart>('line')
 const bar = defineModel<barChart>('bar')
 const axis = defineModel<chartAxis>('axis')
 const showCrosshair = defineModel<boolean>('showCrosshair')
+const colors = defineModel<string[]>('colors')
+
+if(line.value) {
+  accordionSettings.push({
+    label: 'Line',
+    slot: 'line',
+    icon: 'i-solar-graph-linear',
+    defaultOpen: false,
+    disabled: false
+  })
+}
+
+if(bar.value) {
+  accordionSettings.push({
+    label: 'Bar',
+    slot: 'bar',
+    icon: 'i-solar-chart-square-linear',
+    defaultOpen: false,
+    disabled: false
+  })
+}
 
 const invertLabelAxis = () => {
   const { cloned } = useCloned(axis.value)

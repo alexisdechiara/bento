@@ -4,7 +4,11 @@ export { Item, ImageItem, ChartItem, LineChartItem, DataRecord }
 
 declare global {
 
-  type DataRecord = { x: number; y: number }
+  type DataRecord = {
+    x: number
+    y?: number
+    y1?: number
+  }
 
   interface Item {
     label: string
@@ -65,6 +69,22 @@ declare global {
     groupPadding?: number
     barPadding?: number
     minimumBarHeight?: number
+  }
+
+  interface BarChartItem {
+    options: {
+      axis: chartAxis
+      annotations: AnnotationItem[]
+      crosshair: {
+        show: boolean
+        value: (d: DataRecord) => string
+      }
+      color: (d: DataRecord, i: number) => string
+      bar: barChart
+    }
+    data: DataRecord[]
+    x?: (d: DataRecord) => number
+    y?: (d: DataRecord) => number | number[]
   }
 
   interface LineChartItem {

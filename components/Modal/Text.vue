@@ -29,7 +29,7 @@
                       </UButton>
                       <UButton v-for="(hex, name) in filledColors" :key="name" color="gray" class="p-1.5 transition-all hover:ring-1 ring-gray-300" :class="{ 'ring-1': editor.isActive('textStyle', { color: hex }) }" square variant="ghost" @click="editor.chain().focus().setColor(hex).run()">
                         <template #leading>
-                          <div class="w-6 h-6  rounded" :style="{ backgroundColor: hex }" />
+                          <div class="w-6 h-6 rounded" :style="{ backgroundColor: hex }" />
                         </template>
                       </UButton>
                       <!-- <UButton color="black" icon="i-heroicons-plus" square variant="link" @click="editor.chain().focus().unsetColor().run()" /> -->
