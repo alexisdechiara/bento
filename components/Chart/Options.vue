@@ -25,7 +25,14 @@
     <template #crosshair>
       <UFormGroup label="Show crosshair" class="grid grid-cols-2 items-center" :ui="{ container: '' }">
         <div class="flex justify-end">
-          <UToggle v-model="showCrosshair" />
+          <UToggle v-model="crosshair.show" />
+        </div>
+      </UFormGroup>
+    </template>
+    <template #tooltip>
+      <UFormGroup label="Show tooltip" class="grid grid-cols-2 items-center" :ui="{ container: '' }">
+        <div class="flex justify-end">
+          <UToggle v-model="tooltip.show" />
         </div>
       </UFormGroup>
     </template>
@@ -114,30 +121,6 @@
 <script lang="ts" setup>
 import { useCloned } from '@vueuse/core'
 
-const accordionSettings = [
-  {
-    label: 'Annotations',
-    slot: 'annotations',
-    icon: 'i-heroicons-chat-bubble-bottom-center-text',
-    defaultOpen: false,
-    disabled: true
-  },
-  {
-    label: 'Axis',
-    slot: 'axis',
-    icon: 'i-mdi-axis',
-    defaultOpen: true,
-    disabled: false
-  },
-  {
-    label: 'Crosshair',
-    slot: 'crosshair',
-    icon: 'i-ph-crosshair',
-    defaultOpen: false,
-    disabled: false
-  }
-]
-
 const colorList = [
   {
     name: 'blue',
@@ -181,8 +164,51 @@ const annotation = defineModel<annotationChart>('annotation')
 const line = defineModel<lineChart>('line')
 const bar = defineModel<barChart>('bar')
 const axis = defineModel<chartAxis>('axis')
-const showCrosshair = defineModel<boolean>('showCrosshair')
+const crosshair = defineModel<chartCrosshair>('crosshair')
 const colors = defineModel<string[]>('colors')
+const tooltip = defineModel<chartTooltip>('tooltip')
+
+const accordionSettings: Array<Object> = []
+
+if(annotation.value) {
+  accordionSettings.push({
+    label: 'Annotations',
+    slot: 'annotations',
+    icon: 'i-solar-subtitles-linear',
+    defaultOpen: false,
+    disabled: true
+  })
+}
+
+if(axis.value) {
+  accordionSettings.push({
+    label: 'Axis',
+    slot: 'axis',
+    icon: 'i-mdi-axis',
+    defaultOpen: false,
+    disabled: false
+  })
+}
+
+if(crosshair.value) {
+  accordionSettings.push({
+    label: 'Crosshair',
+    slot: 'crosshair',
+    icon: 'i-ph-crosshair',
+    defaultOpen: false,
+    disabled: false
+  })
+}
+
+if(tooltip.value) {
+  accordionSettings.push({
+    label: 'Tooltip',
+    slot: 'tooltip',
+    icon: 'i-heroicons-chat-bubble-bottom-center-text',
+    defaultOpen: false,
+    disabled: false
+  })
+}
 
 if(line.value) {
   accordionSettings.push({

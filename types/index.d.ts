@@ -40,6 +40,16 @@ declare global {
     description?: string
   }
 
+  type chartTooltip = {
+    show: boolean
+    content: (d: DataRecord) => string
+  }
+
+  type chartCrosshair = {
+    show: boolean
+    value: (d: DataRecord) => string
+  }
+
   type chartAxis = {
     x?: {
       show?: boolean
@@ -75,16 +85,13 @@ declare global {
     options: {
       axis: chartAxis
       annotations: AnnotationItem[]
-      crosshair: {
-        show: boolean
-        value: (d: DataRecord) => string
-      }
-      color: (d: DataRecord, i: number) => string
+      tooltip: chartTooltip
+      colors: string[]
       bar: barChart
     }
     data: DataRecord[]
     x?: (d: DataRecord) => number
-    y?: (d: DataRecord) => number | number[]
+    y?: ((d: DataRecord) => number)[]
   }
 
   interface LineChartItem {
