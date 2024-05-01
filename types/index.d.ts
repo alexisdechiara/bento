@@ -6,8 +6,7 @@ declare global {
 
   type DataRecord = {
     x: number
-    y?: number
-    y1?: number
+    y1: number
   }
 
   interface Item {
@@ -47,7 +46,7 @@ declare global {
 
   type chartCrosshair = {
     show: boolean
-    value: (d: DataRecord) => string
+    content: (d: DataRecord) => string
   }
 
   type chartAxis = {
@@ -98,12 +97,12 @@ declare global {
     options: {
       axis: chartAxis
       annotations: AnnotationItem[]
-      crosshair: {
-        show: boolean
-        value: (d: DataRecord) => string
-      }
+      crosshair: chartCrosshair
       line: lineChart
-    },
+      colors: string[]
+    }
     data: DataRecord[]
+    x?: (d: DataRecord) => number
+    y?: ((d: DataRecord) => number)[]
   }
 }

@@ -76,11 +76,11 @@
           <UInput :value="line.dashes" placeholder="No dashes" type="number" min="0" @input="event => line.dashes = new Array<number>(event.target.value).fill(event.target.value)" />
         </UFormGroup>
       </div>
-      <UFormGroup label="Line Color">
-        <div class="flex gap-x-3">
-          <div v-for="color in colorList" :key="color.name">
-            <input :id="color.name" v-model="line.color" type="radio" name="color" :value="color.hex" class="hidden peer">
-            <label :for="color.name" class="flex size-7 cursor-pointer transition rounded-full ring-offset-2 ring-1 ring-transparent peer-checked:ring-black" :class="`bg-${color.name}-500 hover:bg-${color.name}-700`" />
+      <UFormGroup label="Line colors">
+        <div class="flex flex-col gap-y-2">
+          <div v-for="(data, index) in columns" :key="data.key" class="flex border-2 p-2 rounded-lg items-center justify-between">
+            <span class="text-gray-700 dark:text-gray-400 font-medium">{{ data.label }}</span>
+            <UIRadioColorGroup v-model="colors[index]" :name="data.key" :color-list="colorList" />
           </div>
         </div>
       </UFormGroup>
