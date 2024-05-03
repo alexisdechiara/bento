@@ -7,36 +7,38 @@ hero:
     - label: Get started
       icon: i-heroicons-arrow-right-20-solid
       trailing: true
-      to: '/playground'
+      to: /playground
       size: xl
     - label: See templates
       icon: i-heroicons-beaker
       size: xl
       color: gray
       to: /playground
+      disabled: true
+      class: 'cursor-not-allowed opacity-50 hover:bg-current'
 features:
   headline: Features
   title: Why choose our service?
   description: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
   items:
     - title: Easy to use
-      description: Id laborum laboris duis nostrud excepteur ut velit nulla magna Lorem proident non.
+      description: All you have to do is create items and they will automatically be added to your layout.
       icon: i-heroicons-cube-transparent
-    - title: Reliable
-      description: Magna Lorem ex cillum fugiat ad enim aute irure sit duis minim.
+    - title: Customizable
+      description: Each item is customizable, with the option of editing, moving and resizing.
       icon: i-heroicons-check
-    - title: Secure
-      description: Proident nostrud excepteur sint ut culpa consectetur aute adipisicing non anim ullamco.
-      icon: i-heroicons-lock-closed
-    - title: Fast
-      description: Qui reprehenderit nostrud dolore nisi ad fugiat labore eiusmod sint aliquip nisi voluptate.
-      icon: i-heroicons-rocket-launch
     - title: Affordable
-      description: Reprehenderit fugiat elit in do ipsum ut pariatur.
+      description: No price, everything's in the bag!
       icon: i-heroicons-currency-dollar
-    - title: Scalable
-      description: Lorem deserunt et eiusmod. Ea in consectetur minim officia ullamco enim deserunt est.
-      icon: i-heroicons-chart-bar
+    - title: Open source
+      description: All this project is open source with a GPLv3 license.
+      icon: i-heroicons-lock-open
+    - title: Adapted to new technologies
+      description: Uses recent and constantly evolving libraries to offer ever more options and performances.
+      icon: i-heroicons-rocket-launch
+    - title: UI compliant
+      description: Supporting a high-quality UI to make the most beautiful bento possible.
+      icon: i-heroicons-sparkles
 pricing:
   headline: Pricing
   title: A plan for every need
@@ -50,12 +52,12 @@ pricing:
       align: top
       button:
         label: Get Started
-        color: gray
+        to: /playground
+      disabled: false
       features:
         - One layout
-        - Exportable layout with as image
+        - Exportable layout as image
         - Watermark
-        - 10 templates
     - title: Basic
       description: Everything you need
       price: Free
@@ -64,14 +66,13 @@ pricing:
       align: top
       button:
         label: Create an account
-        color: gray
+      disabled: true
       features:
         - 1 Account
         - Unlimited layouts
         - Storable layouts
         - Sharable layouts
         - No watermark
-        - 10 templates
 faq:
   title: Frequently asked questions
   description: If you can't find what you're looking for, email to the website creator and he will answer you
@@ -79,6 +80,12 @@ faq:
     - label: Can i use the service without account?
       content: Yes, you can create and export a layout without an account, but you'll have a watermark and you won't be able to get a shareable link.
       defaultOpen: true
-    - label: Can i use the service without account?
-      content: Yes, you can create and export a layout without an account, but you'll have a watermark and you won't be able to get a shareable link.
+    - label: Why did you created this service?
+      content: This site was created to show the skills of its creator in the realization of a SaaS using Nuxt and Nuxt UI, it has no commercial purpose.
+      defaultOpen: false
+    - label: Will there be improvements and additions in the future?
+      content: Of course, as this is a personal project that doesn't earn money, it can take some time, so you can always participate by visiting the project's GitHub.
+      defaultOpen: false
+    - label: Can I use the project to make my own version?
+      content: Bento Studio is licensed under the GPLv3, which means you can use it to make your own version, but you're not allowed to change the license, so you have to offer open source access to your project.
       defaultOpen: false

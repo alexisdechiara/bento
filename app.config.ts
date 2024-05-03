@@ -13,8 +13,8 @@ export default defineAppConfig({
       close: 'i-heroicons-x-mark-20-solid',
       check: 'i-heroicons-check-circle-20-solid'
     },
-    primary: 'indigo',
-    gray: 'zinc',
+    primary: 'bento',
+    gray: 'cool',
     variables: {
       light: {
         background: 'var(--color-gray-50)'
