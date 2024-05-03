@@ -8,10 +8,44 @@
       <ModalMenu @close="isOpen = false" />
     </UModal>
     <UDivider class="py-4" />
-    <Grid />
+    <div id="content" class="w-full h-full pb-16">
+      <Grid />
+    </div>
+    <UDivider class="py-4" />
+    <UButtonGroup orientation="horizontal" class="ml-auto" color="white">
+      <!-- <UButton label="Save As" @click="saveGridAs('png')" /> -->
+      <UDropdown :items="items" :popper="{ placement: 'right-start' }" color="white">
+        <UButton label="Save As" trailing icon="i-heroicons-chevron-down-20-solid" color="white" />
+      </UDropdown>
+    </UButtonGroup>
   </UContainer>
 </template>
 
 <script setup lang="ts">
+import domtoimage from 'dom-to-image-more'
+import { saveAs } from 'file-saver'
+
 const isOpen = ref(false)
+
+const items = [
+  [{
+    label: 'PNG',
+    click: () => saveGridAs('png')
+  },
+  {
+    label: 'JPG',
+    click: () => saveGridAs('jpg')
+  },
+  {
+    label: 'WEBP',
+    click: () => saveGridAs('webp')
+  }]
+]
+
+function saveGridAs(extension: string) {
+  domtoimage.toBlob(document.getElementById('content')).then(function (blob) {
+    saveAs(blob, `bento-layout.${extension}`)
+  })
+}
+
 </script>
