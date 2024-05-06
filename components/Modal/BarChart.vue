@@ -1,18 +1,17 @@
 <template>
-  <ModalItem :values="values" label="Line Chart" :component-id="7" :preserve-aspect-ratio="false" :is-submitable="data.length > 0" :width="2" :height="2" @return="$emit('return')" @close="$emit('close')">
+  <ModalItem :values="values" label="Line Chart" :component-id="8" :width="2" :height="2" :preserve-aspect-ratio="false" :is-submitable="data.length > 0" @return="$emit('return')" @close="$emit('close')">
     <template #preview>
-      <ItemLineChart :values="values" />
+      <ItemBarChart :values="values" />
     </template>
     <template #content>
       <div class="grid grid-cols-2 size-full overflow-hidden">
         <ClientOnly>
           <VisXYContainer :key="componentKey" :data="data" :margin="{ left: 0, top: 4, right: 16, bottom: 4 }" class="relative">
-            <VisLine :curve-type="line.type" :line-width="line.width" :color="(d: DataRecord, i: number) => colors[i]" :line-dash-array="line.dashes" :x="x" :y="y" />
+            <VisGroupedBar :orientation="bar.orientation" :rounded-corners="bar.roundedCorners" :color="(d: DataRecord, i: number) => colors[i]" :bar-padding="bar.barPadding" :group-padding="bar.groupPadding" :x="x" :y="y" />
             <VisAnnotations :items="annotationList" />
-            <VisTooltip />
+            <VisTooltip v-if="tooltip.show" :triggers="{[GroupedBar.selectors.bar]: triggers}" />
             <VisAxis v-if="axis.x.show" :label-font-size="axis.x.labelSize" :tick-text-font-size="!axis.x.options.includes('Tick label') ? 0 : 12" :grid-line="axis.x.options.includes('Grid line')" :tick-line="axis.x.options.includes('Tick line')" :domain-line="axis.x.options.includes('Domain line')" type="x" :label="axis.x.label" />
             <VisAxis v-if="axis.y.show" :label-font-size="axis.y.labelSize" :tick-text-font-size="!axis.y.options.includes('Tick label') ? 0 : 12" :grid-line="axis.y.options.includes('Grid line')" :tick-line="axis.y.options.includes('Tick line')" :domain-line="axis.y.options.includes('Domain line')" type="y" :label="axis.y.label" />
-            <VisCrosshair v-if="crosshair.show" :template="crosshair.content" />
           </VisXYContainer>
         </ClientOnly>
         <ChartTable v-model:rows="data" v-model:columns="columns" v-model:x="x" v-model:y="y" v-model:colors="colors" @updated="forceRerender()" />
@@ -22,16 +21,15 @@
       <div class="grid grid-cols-2 size-full overflow-hidden">
         <ClientOnly>
           <VisXYContainer :key="componentKey" :data="data" :margin="{ left: 0, top: 4, right: 16, bottom: 4 }" class="relative">
-            <VisLine :curve-type="line.type" :line-width="line.width" :color="(d: DataRecord, i: number) => colors[i]" :line-dash-array="line.dashes" :x="x" :y="y" />
+            <VisGroupedBar :orientation="bar.orientation" :rounded-corners="bar.roundedCorners" :color="(d: DataRecord, i: number) => colors[i]" :bar-padding="bar.barPadding" :group-padding="bar.groupPadding" :x="x" :y="y" />
             <VisAnnotations :items="annotationList" />
-            <VisTooltip />
+            <VisTooltip v-if="tooltip.show" :triggers="{[GroupedBar.selectors.bar]: triggers}" />
             <VisAxis v-if="axis.x.show" :label-font-size="axis.x.labelSize" :tick-text-font-size="!axis.x.options.includes('Tick label') ? 0 : 12" :grid-line="axis.x.options.includes('Grid line')" :tick-line="axis.x.options.includes('Tick line')" :domain-line="axis.x.options.includes('Domain line')" type="x" :label="axis.x.label" />
             <VisAxis v-if="axis.y.show" :label-font-size="axis.y.labelSize" :tick-text-font-size="!axis.y.options.includes('Tick label') ? 0 : 12" :grid-line="axis.y.options.includes('Grid line')" :tick-line="axis.y.options.includes('Tick line')" :domain-line="axis.y.options.includes('Domain line')" type="y" :label="axis.y.label" />
-            <VisCrosshair v-if="crosshair.show" :template="crosshair.content" />
           </VisXYContainer>
         </ClientOnly>
         <div class="flex flex-col max-h-full gap-y-4 py-1.5 pr-0.5 overflow-auto">
-          <ChartOptions v-model:colors="colors" v-model:annotation="annotation" v-model:line="line" v-model:axis="axis" v-model:crosshair="crosshair" :line-types="types" :label-options="labelOptions" :columns="columns.filter((c: any) => c.key.startsWith('y'))" />
+          <ChartOptions v-model:colors="colors" v-model:annotation="annotation" v-model:axis="axis" v-model:tooltip="tooltip" v-model:bar="bar" :label-options="labelOptions" :columns="columns.filter((c: any) => c.key.startsWith('y'))" />
         </div>
       </div>
     </template>
@@ -39,9 +37,16 @@
 </template>
 
 <script lang="ts" setup>
-import { VisXYContainer, VisLine, VisAxis, VisTooltip, VisCrosshair } from '@unovis/vue'
-import { Line, type AnnotationItem } from '@unovis/ts'
-const { types, labelOptions } = useLineChart()
+import { VisXYContainer, VisGroupedBar, VisAxis, VisTooltip } from '@unovis/vue'
+import { GroupedBar, type AnnotationItem } from '@unovis/ts'
+
+const { labelOptions } = useLineChart()
+
+function triggers(d: DataRecord): string {
+  const title = `<div style="text-align: center; font-weight: 600; font-size: 16px">${d.x}</div>`
+  const description = columns.value.map((c) => c.key).filter((k) => k.startsWith('y')).map((k) => `<span style="color:${colors.value[columns.value.findIndex((c) => c.key === k) - 1]}">${columns.value.find((c) => c.key === k)?.label} :  ${d[k]}</span>`).join('<br/>')
+  return `<div style="font-size: 14px;font-weight: 500">${title}${description}</div>`
+}
 
 const columns = computed(() => [
   {
@@ -106,20 +111,14 @@ const axis = ref<chartAxis>({
   }
 })
 
-const line = ref<lineChart>({
-  type: types[0].value,
-  color: '#3b82f6',
-  width: 2,
-  dashes: [0]
+const bar = ref<barChart>({
+  orientation: 'vertical',
+  barPadding: 0,
+  groupPadding: 0.2,
+  roundedCorners: 0,
 })
 
-function triggers(d: DataRecord): string {
-  const title = `<div style="text-align: center; font-weight: 600; font-size: 16px">${d.x}</div>`
-  const description = columns.value.map((c) => c.key).filter((k) => k.startsWith('y')).map((k) => `<span style="color:${colors.value[columns.value.findIndex((c) => c.key === k) - 1]}">${columns.value.find((c) => c.key === k)?.label} :  ${d[k]}</span>`).join('<br/>')
-  return `<div style="font-size: 14px;font-weight: 500">${title}${description}</div>`
-}
-
-const crosshair = ref<chartCrosshair>({
+const tooltip = ref<chartTooltip>({
   show: true,
   content: triggers
 })
@@ -131,7 +130,7 @@ const annotationList = computed<AnnotationItem[]>(() => [
   { x: 1, y: 5, width: 200, content: annotation.value.description }
 ])
 
-watch(() => [axis.value.x.show, axis.value.y.show, crosshair.value.show, colors.value],  () => forceRerender(), {deep: true})
+watch(() => [axis.value.x.show, axis.value.y.show, tooltip.value.show, colors.value], () => forceRerender(), {deep: true})
 
 const forceRerender = () => {
   componentKey.value ++
@@ -139,16 +138,16 @@ const forceRerender = () => {
 
 defineEmits(['return', 'close'])
 
-const values = computed<LineChartItem>(() => ({
+const values: BarChartItem = {
   options: {
     axis: axis.value,
     annotations: annotationList.value,
-    crosshair: crosshair.value,
-    line: line.value,
-    colors: colors.value
+    colors: colors.value,
+    tooltip: tooltip.value,
+    bar: bar.value,
   },
   data : data,
   x: x.value,
   y: y.value
-}))
+}
 </script>

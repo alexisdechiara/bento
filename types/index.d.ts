@@ -4,7 +4,10 @@ export { Item, ImageItem, ChartItem, LineChartItem, DataRecord }
 
 declare global {
 
-  type DataRecord = { x: number; y: number }
+  type DataRecord = {
+    x: number
+    y1: number
+  }
 
   interface Item {
     label: string
@@ -30,34 +33,76 @@ declare global {
     series: Array<number>
   }
 
+  type annotationChart = {
+    title?: string
+    titleSize?: number
+    description?: string
+  }
+
+  type chartTooltip = {
+    show: boolean
+    content: (d: DataRecord) => string
+  }
+
+  type chartCrosshair = {
+    show: boolean
+    content: (d: DataRecord) => string
+  }
+
+  type chartAxis = {
+    x?: {
+      show?: boolean
+      label?: string
+      labelSize?: number
+      options?: string[]
+    }
+    y?: {
+      show?: boolean
+      label?: string
+      labelSize?: number
+      options?: string[]
+    }
+  }
+
+  type lineChart = {
+    type?: string
+    color?: string
+    width?: number
+    dashes?: number[]
+  }
+
+  type barChart = {
+    orientation?: string
+    roundedCorners?: boolean | number
+    groupWidth?: number
+    groupPadding?: number
+    barPadding?: number
+    minimumBarHeight?: number
+  }
+
+  interface BarChartItem {
+    options: {
+      axis: chartAxis
+      annotations: AnnotationItem[]
+      tooltip: chartTooltip
+      colors: string[]
+      bar: barChart
+    }
+    data: DataRecord[]
+    x?: (d: DataRecord) => number
+    y?: ((d: DataRecord) => number)[]
+  }
+
   interface LineChartItem {
     options: {
-      axis: {
-        x: {
-          show: boolean
-          label: string
-          labelSize: number
-          options: string[]
-        }
-        y: {
-          show: boolean
-          label: string
-          labelSize: number
-          options: string[]
-        }
-      }
+      axis: chartAxis
       annotations: AnnotationItem[]
-      crosshair: {
-        show: boolean
-        value: (d: DataRecord) => string
-      }
-      line: {
-        type: string
-        color: string
-        width: number
-        dashes: number[]
-      }
-    },
+      crosshair: chartCrosshair
+      line: lineChart
+      colors: string[]
+    }
     data: DataRecord[]
+    x?: (d: DataRecord) => number
+    y?: ((d: DataRecord) => number)[]
   }
 }

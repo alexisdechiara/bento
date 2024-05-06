@@ -31,11 +31,11 @@ export const useGridStore = defineStore({
       if (item) {
 
         if (!item.x) {
-          item.x = (this.items.length) % this.settings.colNum || 4
+          item.x = 0
         }
 
         if (!item.y) {
-          item.y = this.items.length + this.settings.colNum
+          item.y = 0
         }
 
         if (!item.i) {

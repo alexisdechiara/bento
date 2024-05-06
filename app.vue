@@ -46,6 +46,7 @@ useSeoMeta({
   <Main>
     <NuxtPage />
   </Main>
+  <UNotifications />
 
   <Footer :links="footerPage.links">
     <template #left>

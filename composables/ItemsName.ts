@@ -8,7 +8,8 @@ export const useItemsName = () => {
     'Text', //4
     'Placeholder', //5
     'Date', //6
-    'LineChart' //7
+    'LineChart', //7
+    'BarChart' //8
   ]
 
   function getItemNameById(id: number) {

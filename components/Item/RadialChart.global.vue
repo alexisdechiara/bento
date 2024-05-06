@@ -5,7 +5,6 @@ defineProps<{
   values: ChartItem
 }>()
 
-defineEmits(['remove', 'edit'])
 </script>
 
 <template>

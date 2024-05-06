@@ -1,5 +1,5 @@
 <template>
-  <UCard :class="[ui.wrapper, highlight && ui.highlight, scale && ui.scale]" v-bind="attrs" :ui="ui">
+  <UCard :class="[ui.wrapper, highlight && ui.highlight, scale && ui.scale, disabled && ui.disabled]" v-bind="attrs" :ui="ui">
     <template v-if="$slots.header" #header>
       <slot name="header" />
     </template>
@@ -45,7 +45,7 @@
       </slot>
     </div>
 
-    <UButton v-if="button" :block="true" size="lg" :label="button.label" @click="button.click" />
+    <UButton v-if="button" :block="true" size="lg" :disabled="disabled" :label="button.label" @click="button.click" />
 
     <template v-if="$slots.footer" #footer>
       <slot name="footer" />
@@ -75,6 +75,7 @@ const props = withDefaults(defineProps<{
   cycle?: string
   ui?: Partial<typeof config & typeof cardConfig>
   class?: any
+  disabled?: boolean
 }>(), {
   title: '',
   description: undefined,
@@ -88,7 +89,8 @@ const props = withDefaults(defineProps<{
   discount: undefined,
   cycle: undefined,
   ui: () => ({}),
-  class: undefined
+  class: undefined,
+  disabled: false
 })
 
 const config = {
@@ -96,6 +98,7 @@ const config = {
   highlight: 'ring-gray-900 dark:ring-white ring-2',
   scale: 'lg:scale-[1.1] lg:z-10',
   rounded: 'rounded-xl',
+  disabled: 'opacity-75 shadow-none cursor-not-allowed',
   body: {
     base: 'flex-1 flex flex-col gap-y-6',
     padding: 'p-8 xl:p-10'
