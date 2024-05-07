@@ -6,7 +6,7 @@ links:
   - label: Legal notice
     to: 'legal-notice'
   - label: Feature request
-    to: '#'
+    to: 'https://bento-studio.canny.io'
     target: '_blank'
   - label: Blog
     to: "https://geekly.blog"

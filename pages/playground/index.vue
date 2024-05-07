@@ -15,7 +15,7 @@
     <UButtonGroup orientation="horizontal" class="ml-auto" color="white">
       <!-- <UButton label="Save As" @click="saveGridAs('png')" /> -->
       <UDropdown :items="items" :popper="{ placement: 'right-start' }" color="white">
-        <UButton label="Save As" trailing icon="i-heroicons-chevron-down-20-solid" color="white" />
+        <UButton label="Save" trailing icon="i-heroicons-chevron-down-20-solid" color="white" />
       </UDropdown>
     </UButtonGroup>
   </UContainer>
